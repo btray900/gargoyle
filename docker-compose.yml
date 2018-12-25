@@ -1,0 +1,41 @@
+version: '3'
+services:
+  db:
+    container_name: db
+    build: ./db
+    restart: always
+
+  db-api:
+    container_name: api
+    build: ./db-api
+    ports:
+      - "15000:5000"
+    restart: always
+
+#  engine:
+#    container_name: engine
+#    build: ./engine
+#    restart: always
+
+  es-master:
+    container_name: es-master
+    build: ./es-master
+    restart: always
+
+  es-data:
+    container_name: es-data
+    build: ./es-data
+    restart: always
+
+  kibana:
+    container_name: kibana
+    build: ./kibana
+    ports:
+      - "15601:5601"
+    restart: always
+
+networks:
+  default:
+    external:
+      name: gargoyle-net
+

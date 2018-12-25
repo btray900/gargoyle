@@ -1,0 +1,19 @@
+cluster.name: gargoyle-cluster
+
+node.name: es-data-node-1
+
+path.data: /opt/es_data
+path.logs: /var/log/elasticsearch
+
+network.host: es-data
+network.publish_host: es-data
+
+discovery.zen.minimum_master_nodes: 1
+discovery.zen.ping.unicast.hosts: [ "es-master","es-data" ]
+
+node.master: false
+node.data: true
+node.ingest: false
+
+search.remote.connect: false
+
