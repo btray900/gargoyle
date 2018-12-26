@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-
-# bt106c - main func
+# bt106c
 
 import re
 import sys
@@ -10,11 +9,7 @@ import datetime
 import argparse
 import multiprocessing
 from types import FunctionType
-
-#Handlers
-from DbHandler import DbHandler
 from CommonHandler import CommonHandler
-from CheckHandler import CheckHandler
 
 
 def getMethods():
@@ -60,7 +55,21 @@ def listener(commonHandler, queue):
     return
 
 
-def variableWorker(gargoyleFunctions, isSudoWhitelistCmd, commonHandler, queue, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson, fkFunction):
+def variableWorker(gargoyleFunctions, 
+                   isSudoWhitelistCmd, 
+                   commonHandler, 
+                   queue, 
+                   component, 
+                   checkID, 
+                   checkTask, 
+                   command, 
+                   regex, 
+                   resource, 
+                   expected, 
+                   checkValue, 
+                   valueLogic, 
+                   host, 
+                   fkFunction):
     '''
     gargoyleFunctions are used to compare to the DB fkFunction field. On
     a match the variable funcObject is executed. Log output is put into the queue for logging.
@@ -79,8 +88,6 @@ def variableWorker(gargoyleFunctions, isSudoWhitelistCmd, commonHandler, queue, 
     :param str checkValue: Value for logical evaluation.
     :param str valueLogic: Logic to evaluate actual value, greater than or equal to 'gte', less than or equal to, 'lte', or equals 'equal'.
     :param str host: Target full FQDN.
-    :param str hostname: Target hostname.
-    :param str zone: Zone identifier.
     :param str fkFunction: Name of function to use
     '''
 
@@ -90,13 +97,36 @@ def variableWorker(gargoyleFunctions, isSudoWhitelistCmd, commonHandler, queue, 
         # if FK matches global function name
         if funcName == fkFunction:
             # Call the function string matched object
-            logOutput = funcObject(commonHandler, isSudoWhitelistCmd, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson)
+            logOutput = funcObject(commonHandler, 
+                                   isSudoWhitelistCmd, 
+                                   component, 
+                                   checkID, 
+                                   checkTask, 
+                                   command, 
+                                   regex, 
+                                   resource, 
+                                   expected, 
+                                   checkValue, 
+                                   valueLogic, 
+                                   host)
 
     queue.put(logOutput)
     return
 
 
-def setLogOutput(hostname, level, component, checkID, checkTask, cmd, resource = '', expected = '', checkValue = '', valueLogic = '', actual = '', output = '', testResult = '', bundleJson = ''):
+def setLogOutput(host, 
+                 level, 
+                 component, 
+                 checkID, 
+                 checkTask, 
+                 cmd, 
+                 resource = '', 
+                 expected = '', 
+                 checkValue = '', 
+                 valueLogic = '', 
+                 actual = '', 
+                 output = '', 
+                 testResult = ''):
     '''
     Format data into JSON log format
 
@@ -123,26 +153,26 @@ def setLogOutput(hostname, level, component, checkID, checkTask, cmd, resource =
 
     # data is base64 encoded to prevent syntax issues with json lua encoder
     if "'" in str(cmd) or '"' in str(cmd) or '\n' in str(cmd):
-        cmd = base64.b64encode(cmd)
+        cmd = base64.b64encode(bytes(cmd, 'utf-8'))
 
     if "'" in str(expected) or '"' in str(expected) or '\n' in str(expected):
-        expected = base64.b64encode(expected)
+        expected = base64.b64encode(bytes(expected, 'utf-8'))
 
     if "'" in str(checkValue) or '"' in str(checkValue) or '\n' in str(checkValue):
-        checkValue = base64.b64encode(checkValue)
+        checkValue = base64.b64encode(bytes(checkValue, 'utf-8'))
 
     if "'" in str(actual) or '"' in str(actual) or '\n' in str(actual):
-        actual = base64.b64encode(actual)
+        actual = base64.b64encode(bytes(actual, 'utf-8'))
 
     if "'" in str(output) or '"' in str(output) or '\n' in str(output):
-        output = base64.b64encode(output)
+        output = base64.b64encode(bytes(output, 'utf-8'))
 
     # JSON log format
     logOutput = '{"gargoyleLogType":"%s","gargoyleTimestamp":"%s","gargoyleSeverity":"%s","gargoyleHostname":"%s","gargoyleComponent":"%s","gargoyleCheckID":"%s","gargoyleTask":"%s","gargoyleCommand":"%s","gargoyleResource":"%s","gargoyleExpected":"%s","gargoyleCheckValue":"%s","gargoyleValueLogic":"%s","gargoyleActual":"%s","gargoyleOutput":"%s","gargoyleResult":"%s"}' % (
         'osgLogger',
         timeStamp,
         level,
-        hostname,
+        host,
         component,
         checkID,
         checkTask,
@@ -158,7 +188,18 @@ def setLogOutput(hostname, level, component, checkID, checkTask, cmd, resource =
     return logOutput
 
 
-def injectionTest(commonHandler, isSudoWhitelistCmd, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson):
+def injectionTest(commonHandler, 
+                  isSudoWhitelistCmd, 
+                  component, 
+                  checkID, 
+                  checkTask, 
+                  command, 
+                  regex, 
+                  resource, 
+                  expected, 
+                  checkValue, 
+                  valueLogic, 
+                  host):
     '''
     Test command execution via bypass
     '''
@@ -187,7 +228,18 @@ def injectionTest(commonHandler, isSudoWhitelistCmd, component, checkID, checkTa
     return
 
 
-def checkSubstrConfigParameter(commonHandler, isSudoWhitelistCmd, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson):
+def checkSubstrConfigParameter(commonHandler, 
+                               isSudoWhitelistCmd, 
+                               component, 
+                               checkID, 
+                               checkTask, 
+                               command, 
+                               regex, 
+                               resource, 
+                               expected, 
+                               checkValue, 
+                               valueLogic, 
+                               host):
     '''
     Pass if the checkValue is contained in the actual output, no split.
     Fail for all other conditions.
@@ -289,12 +341,35 @@ def checkSubstrConfigParameter(commonHandler, isSudoWhitelistCmd, component, che
             level = 'CRITICAL'
 
         # format log output
-        logOutput = setLogOutput(hostname, zone, zoneJson, level, component, checkID, checkTask, fullCmd, resource, expected, checkValue, valueLogic, actual, output, testResult)
+        logOutput = setLogOutput(host, 
+                                 level, 
+                                 component, 
+                                 checkID, 
+                                 checkTask, 
+                                 fullCmd, 
+                                 resource, 
+                                 expected, 
+                                 checkValue, 
+                                 valueLogic, 
+                                 actual, 
+                                 output, 
+                                 testResult)
 
     return logOutput
 
 
-def checkUnsetParameter(commonHandler, isSudoWhitelistCmd, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson):
+def checkUnsetParameter(commonHandler, 
+                        isSudoWhitelistCmd, 
+                        component, 
+                        checkID, 
+                        checkTask, 
+                        command, 
+                        regex, 
+                        resource, 
+                        expected, 
+                        checkValue, 
+                        valueLogic, 
+                        host):
     '''
     Pass if no data is returned or the parameter is commented out with '#'.
     Fail for all other conditions.
@@ -388,12 +463,35 @@ def checkUnsetParameter(commonHandler, isSudoWhitelistCmd, component, checkID, c
             level = 'INFO'
 
         # format log output
-        logOutput = setLogOutput(hostname, zone, zoneJson, level, component, checkID, checkTask, fullCmd, resource, expected, checkValue, valueLogic, actual, output, testResult)
+        logOutput = setLogOutput(host, 
+                                 level, 
+                                 component, 
+                                 checkID, 
+                                 checkTask, 
+                                 fullCmd, 
+                                 resource, 
+                                 expected, 
+                                 checkValue, 
+                                 valueLogic, 
+                                 actual, 
+                                 output, 
+                                 testResult)
 
     return logOutput
 
 
-def checkValueConfigParameter(commonHandler, isSudoWhitelistCmd, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson):
+def checkValueConfigParameter(commonHandler, 
+                              isSudoWhitelistCmd, 
+                              component, 
+                              checkID, 
+                              checkTask, 
+                              command, 
+                              regex, 
+                              resource, 
+                              expected, 
+                              checkValue, 
+                              valueLogic, 
+                              host):
     '''
     Pass if the checkValue is identical or contained in the actual value, split on the '='.
     Fail for all other conditions.
@@ -480,12 +578,35 @@ def checkValueConfigParameter(commonHandler, isSudoWhitelistCmd, component, chec
             level = 'CRITICAL'
 
         # format log output
-        logOutput = setLogOutput(hostname, zone, zoneJson, level, component, checkID, checkTask, fullCmd, resource, expected, checkValue, valueLogic, actual, output, testResult)
+        logOutput = setLogOutput(host,
+                                 level, 
+                                 component, 
+                                 checkID, 
+                                 checkTask, 
+                                 fullCmd, 
+                                 resource, 
+                                 expected, 
+                                 checkValue, 
+                                 valueLogic, 
+                                 actual, 
+                                 output, 
+                                 testResult)
 
     return logOutput
 
 
-def checkFileSystemSecurity(commonHandler, isSudoWhitelistCmd, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson):
+def checkFileSystemSecurity(commonHandler, 
+                            isSudoWhitelistCmd, 
+                            component, 
+                            checkID, 
+                            checkTask, 
+                            command, 
+                            regex, 
+                            resource, 
+                            expected, 
+                            checkValue, 
+                            valueLogic, 
+                            host):
     '''
     Check file permissions and/or user,group ownership.
 
@@ -557,12 +678,35 @@ def checkFileSystemSecurity(commonHandler, isSudoWhitelistCmd, component, checkI
                 testResult = 'Fail'
                 level = 'CRITICAL'
 
-            logOutput = setLogOutput(hostname, zone, zoneJson, level, component, checkID, checkTask, fullCmd, resource, expected, checkValue, valueLogic, actual, output, testResult)
+            logOutput = setLogOutput(host,
+                                     level, 
+                                     component, 
+                                     checkID, 
+                                     checkTask, 
+                                     fullCmd, 
+                                     resource, 
+                                     expected, 
+                                     checkValue, 
+                                     valueLogic, 
+                                     actual, 
+                                     output, 
+                                     testResult)
 
     return logOutput
 
 
-def failIfAllListInLine(commonHandler, isSudoWhitelistCmd, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson):
+def failIfAllListInLine(commonHandler, 
+                        isSudoWhitelistCmd, 
+                        component, 
+                        checkID, 
+                        checkTask, 
+                        command, 
+                        regex, 
+                        resource, 
+                        expected, 
+                        checkValue, 
+                        valueLogic, 
+                        host):
     '''
     Check resource for application GUI.
 
@@ -619,12 +763,35 @@ def failIfAllListInLine(commonHandler, isSudoWhitelistCmd, component, checkID, c
                 testResult = 'Fail'
 
     # Set to JSON format for Heka ES
-    logOutput = setLogOutput(hostname, zone, zoneJson, level, component, checkID, checkTask, fullCmd, resource, expected, checkValue, valueLogic, actual, output, testResult)
+    logOutput = setLogOutput(host, 
+                             level, 
+                             component, 
+                             checkID, 
+                             checkTask, 
+                             fullCmd, 
+                             resource, 
+                             expected, 
+                             checkValue, 
+                             valueLogic, 
+                             actual, 
+                             output, 
+                             testResult)
 
     return logOutput
 
 
-def passIfAllListInLine(commonHandler, isSudoWhitelistCmd, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson):
+def passIfAllListInLine(commonHandler, 
+                        isSudoWhitelistCmd, 
+                        component, 
+                        checkID, 
+                        checkTask, 
+                        command, 
+                        regex, 
+                        resource, 
+                        expected, 
+                        checkValue, 
+                        valueLogic, 
+                        host):
     '''
     Check resource for application GUI.
 
@@ -706,9 +873,8 @@ def main(gargoyleFunctions):
     '''
 
     # help
-    parser = argparse.ArgumentParser(description='Run SVT checks against host list')
-    parser.add_argument('-p', metavar='component', nargs='?', required=False, const='opssimple', help='Print component checklist. Default: opssimple',)
-    parser.add_argument('-c', metavar='component', nargs='?', required=False, const='opssimple', help='Test by component. Default: opssimple; If the flag is not set, run all checks based on the hostname role regex.',)
+    parser = argparse.ArgumentParser(description='Run OSG checks against host list')
+    parser.add_argument('-c', metavar='component', nargs='?', required=False, const='identity', help='Test by component. Default: identity.',)
     parser.add_argument('-u', '--user_name', required=True, help='SSH Username',)
     parser.add_argument('-n', '--node_list', required=True, help='Path to node list',)
     args = parser.parse_args()
@@ -716,38 +882,27 @@ def main(gargoyleFunctions):
     hostFile = ''
 
     # Assign cli args
-    if args.p is not None:
-        printHosts = args.p
-        db = DbHandler()
-        chk = CheckHandler(db.cursor)
-        chk.printChecks(printHosts,cloud)
-        db.conn.close()
-        sys.exit()
-
     if args.user_name is None:
-        print 'Username required'
+        print('Username required')
         sys.exit()
     else:
-        userName = args.user_name
+        username = args.user_name
 
     if args.c is not None:
-        singleTest = args.i
+        singleComponent = args.c
     else:
-        singleTest = False
+        singleComponent = False
 
     if args.node_list is not None:
         hostFile = args.node_list
 
     # common handler
-    commonHandler = CommonHandler(userName)
-
-    # Get dbHandler handler
-    dbHandler = DbHandler()
+    commonHandler = CommonHandler(username)
 
     # Set mp vars
     cpuCount = multiprocessing.cpu_count()
     if cpuCount == 1:
-        print 'ERROR: You need at least 2 processors to run this script.'
+        print('ERROR: You need at least 2 processors to run this script.')
         sys.exit()
 
     pool = multiprocessing.Pool(processes=cpuCount)
@@ -773,59 +928,56 @@ def main(gargoyleFunctions):
     queue = manager.Queue()
     watcher = pool.apply_async(listener, args=(commonHandler, queue,))
 
-    # security check handler
-    checkHandler = CheckHandler(dbHandler.cursor)
 
     # Set all hostname checks in securityChecks
     for host in hosts:
         host = host.strip()
-        hostname = commonHandler.getHostname(host)
 
         # Set hostname for check selection
         securityChecks[host] = []
 
+        securityChecks[host].append(commonHandler.getChecks(singleComponent))
         # Fill up host dictionary with checks
-        if singleTest:
-            securityChecks[host].append(list(checkHandler.getChecks(singleTest)))
-        else:
-            securityChecks[host].append(list(checkHandler.getChecks('identity')))
-            securityChecks[host].append(list(checkHandler.getChecks('dashboard')))
-            securityChecks[host].append(list(checkHandler.getChecks('compute')))
-            securityChecks[host].append(list(checkHandler.getChecks('blockStorage')))
-            securityChecks[host].append(list(checkHandler.getChecks('objectStorage')))
-            securityChecks[host].append(list(checkHandler.getChecks('networking')))
-            securityChecks[host].append(list(checkHandler.getChecks('imageStorage')))
+#        if singleTest:
+#            securityChecks[host].append(list(checkHandler.getChecks(singleTest)))
+#        else:
+#            securityChecks[host].append(list(checkHandler.getChecks('identity')))
+#            securityChecks[host].append(list(checkHandler.getChecks('dashboard')))
+#            securityChecks[host].append(list(checkHandler.getChecks('compute')))
+#            securityChecks[host].append(list(checkHandler.getChecks('blockStorage')))
+#            securityChecks[host].append(list(checkHandler.getChecks('objectStorage')))
+#            securityChecks[host].append(list(checkHandler.getChecks('networking')))
+#            securityChecks[host].append(list(checkHandler.getChecks('imageStorage')))
 
     # Loop through accumulated checks for injection
-    for host, checkList in securityChecks.iteritems():
+    for host, checkList in securityChecks.items():
         host = host.strip()
-        hostname = commonHandler.getHostname(host)
 
-        for dbHandlerRow in checkList:
+        for checkJsonRow in checkList:
 
-            for row in dbHandlerRow:
+            for row in checkJsonRow:
 
-                blacklistSafe = commonHandler.areFieldsBlacklistSafe([row[4], row[5], row[6]])
+                component = row['component']
+                checkID = row['checkID']
+                checkTask = row['checkTask']
+                command = row['command']
+                regex = row['regex']
+                resource = row['resource']
+                expected = row['expected']
+                checkValue = row['checkValue']
+                valueLogic = row['valueLogic']
+                fkFunction = row['fkFunction']
+
+                blacklistSafe = commonHandler.areFieldsBlacklistSafe([command, regex, resource])
 
                 if blacklistSafe:
-
-                    component = row[1]
-                    checkID = row[2]
-                    checkTask = row[3]
-                    command = row[4]
-                    regex = row[5]
-                    resource = row[6]
-                    expected = row[7]
-                    checkValue = row[8]
-                    valueLogic = row[9]
-                    fkFunction = row[10]
 
                     isAllowed = commonHandler.isAllowed(command)
 
                     if isAllowed:
                         isSudoWhitelistCmd = commonHandler.isSudoWhitelist(command)
 
-                        securityWorker = pool.apply_async(variableWorker, args=(gargoyleFunctions, isSudoWhitelistCmd, commonHandler, queue, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, hostname, zone, zoneJson, fkFunction))
+                        securityWorker = pool.apply_async(variableWorker, args=(gargoyleFunctions, isSudoWhitelistCmd, commonHandler, queue, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, fkFunction))
                         securityWorkers.append(securityWorker)
 
                     else:
@@ -853,8 +1005,6 @@ def main(gargoyleFunctions):
     pool.close()
     pool.join()
 
-    # close dbHandler connection
-    dbHandler.conn.close()
     return
 
 

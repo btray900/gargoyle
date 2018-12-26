@@ -17,8 +17,7 @@ RUN mkdir -p /root/.ssh
 COPY ./id_rsa /root/.ssh
 COPY ./config /root/.ssh
 RUN chmod 600 /root/.ssh/id_rsa
-RUN curl -s -o /tmp/logstash-6.4.0.deb https://artifacts.elastic.co/downloads/logstash/logstash-6.4.0.deb
-#COPY ./logstash-6.4.0.deb /tmp
+RUN curl -s -o /tmp/logstash-6.5.1.deb https://artifacts.elastic.co/downloads/logstash/logstash-6.5.1.deb
 COPY ./setup_dashboard.py /tmp
 COPY ./check_health.sh /tmp
 COPY ./hosts/ /tmp/
@@ -27,7 +26,7 @@ COPY ./proxychains-ng/ /tmp/proxychains-ng/
 COPY ./code/ /gargoyle/
 RUN cd /tmp/proxychains-ng && ./configure --prefix=/usr --sysconfdir=/etc && make
 COPY ./proxychains.conf /tmp
-RUN dpkg -i /tmp/logstash-6.4.0.deb
+RUN dpkg -i /tmp/logstash-6.5.1.deb
 VOLUME /var/log/gargoyle
 COPY ./logstash.conf /etc/logstash/logstash.conf
 CMD /tmp/check_health.sh && /usr/share/logstash/bin/logstash --verbose -f /etc/logstash/logstash.conf

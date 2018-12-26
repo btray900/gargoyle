@@ -1,18 +1,18 @@
 #!/usr/bin/env python
-
 # bt106c - CommonHandler class
-# Handler for bare metal hosts
 
 import datetime
 import paramiko
 import subprocess
 import shlex
+import requests
+import sys
 
-class BareCommonHandler:
+class CommonHandler:
 
-    def __init__(self, mechID):
+    def __init__(self, username):
 
-        self.mechID = mechID
+        self.username = username
 
         self.gargoyleLogPath = '/var/log/gargoyle'
 
@@ -46,6 +46,12 @@ class BareCommonHandler:
             ]
 
         return
+
+    def getChecks(self, component):
+        response = requests.get('http://api:5000/api/v1/checks/%s' % (component))
+        data = response.json()
+        checks = data['payload']
+        return checks
 
     def getHostname(self, host):
         '''
@@ -95,7 +101,7 @@ class BareCommonHandler:
             errorLogger = open(self.errorLogFile, 'a')
             errorLogger.write(errorMsg + '\n')
             errorLogger.close()
-            print 'ERROR - Check %s' % (self.errorLogFile)
+            print('ERROR - Check %s' % (self.errorLogFile))
             isAllowed = False
 
         return isAllowed
@@ -145,7 +151,7 @@ class BareCommonHandler:
             errorLogger = open(self.errorLogFile, 'a')
             errorLogger.write(errorMsg + '\n')
             errorLogger.close()
-            print'ERROR - Check %s' % (self.errorLogFile)
+            print('ERROR - Check %s' % (self.errorLogFile))
             blacklistSafe = False
         else:
             blacklistSafe = True
@@ -170,7 +176,8 @@ class BareCommonHandler:
         s.load_system_host_keys()
 
         try:
-            s.connect(host, username=self.mechID, timeout=5)
+            print(sshCommand)
+            s.connect(host, username=self.username, timeout=5)
             (stdin, stdout, stderr) = s.exec_command(sshCommand) # nosec
             lines = stdout.readlines()
         except Exception as e:
@@ -184,4 +191,3 @@ class BareCommonHandler:
                 s.close()
 
         return lines
-
