@@ -10,4 +10,4 @@ done |
     echo "oops....something went wrong. Check proxy or dns issues with this container to reach kibana or stop and re-up since python might go to fast.........."
   done
 
-#/usr/bin/python /tmp/setup_dashboard.py
+/usr/bin/python /tmp/setup_dashboard.py

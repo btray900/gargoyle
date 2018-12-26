@@ -788,15 +788,13 @@ def main(gargoyleFunctions):
         if singleTest:
             securityChecks[host].append(list(checkHandler.getChecks(singleTest)))
         else:
-            securityChecks[host].append(list(checkHandler.getChecks('keystone')))
-            securityChecks[host].append(list(checkHandler.getChecks('horizon')))
-            securityChecks[host].append(list(checkHandler.getChecks('nova')))
-            securityChecks[host].append(list(checkHandler.getChecks('cinder')))
-            securityChecks[host].append(list(checkHandler.getChecks('swift')))
-            securityChecks[host].append(list(checkHandler.getChecks('neutron')))
-            securityChecks[host].append(list(checkHandler.getChecks('heat')))
-            securityChecks[host].append(list(checkHandler.getChecks('glance')))
-
+            securityChecks[host].append(list(checkHandler.getChecks('identity')))
+            securityChecks[host].append(list(checkHandler.getChecks('dashboard')))
+            securityChecks[host].append(list(checkHandler.getChecks('compute')))
+            securityChecks[host].append(list(checkHandler.getChecks('blockStorage')))
+            securityChecks[host].append(list(checkHandler.getChecks('objectStorage')))
+            securityChecks[host].append(list(checkHandler.getChecks('networking')))
+            securityChecks[host].append(list(checkHandler.getChecks('imageStorage')))
 
     # Loop through accumulated checks for injection
     for host, checkList in securityChecks.iteritems():
