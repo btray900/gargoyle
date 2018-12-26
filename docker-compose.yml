@@ -12,10 +12,10 @@ services:
       - "15000:5000"
     restart: always
 
-#  engine:
-#    container_name: engine
-#    build: ./engine
-#    restart: always
+  engine:
+    container_name: engine
+    build: ./engine
+    restart: always
 
   es-master:
     container_name: es-master

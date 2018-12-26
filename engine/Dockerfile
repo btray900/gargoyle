@@ -9,7 +9,7 @@ RUN apt-get update && apt-get -y install \
 	curl \
 	cron \
 	nano
-RUN pip install mysql-python pyyaml paramiko elasticsearch fpdf requests bs4
+RUN pip install pyyaml paramiko elasticsearch fpdf requests bs4
 RUN mkdir -p /gargoyle
 RUN mkdir -p /var/log/gargoyle
 RUN touch /etc/default/logstash
@@ -17,7 +17,8 @@ RUN mkdir -p /root/.ssh
 COPY ./id_rsa /root/.ssh
 COPY ./config /root/.ssh
 RUN chmod 600 /root/.ssh/id_rsa
-COPY ./logstash-6.4.0.deb /tmp
+RUN curl -s -o /tmp/logstash-6.4.0.deb https://artifacts.elastic.co/downloads/logstash/logstash-6.4.0.deb
+#COPY ./logstash-6.4.0.deb /tmp
 COPY ./setup_dashboard.py /tmp
 COPY ./check_health.sh /tmp
 COPY ./hosts/ /tmp/
