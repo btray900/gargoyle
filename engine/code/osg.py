@@ -848,7 +848,19 @@ def passIfAllListInLine(commonHandler,
                 testResult = 'Pass'
 
     # Set to JSON format for Heka ES
-    logOutput = setLogOutput(hostname, zone, zoneJson, level, component, checkID, checkTask, fullCmd, resource, expected, checkValue, valueLogic, actual, output, testResult)
+    logOutput = setLogOutput(host, 
+                             level, 
+                             component, 
+                             checkID, 
+                             checkTask, 
+                             fullCmd, 
+                             resource, 
+                             expected, 
+                             checkValue, 
+                             valueLogic, 
+                             actual, 
+                             output, 
+                             testResult)
 
     return logOutput
 
@@ -874,7 +886,7 @@ def main(gargoyleFunctions):
 
     # help
     parser = argparse.ArgumentParser(description='Run OSG checks against host list')
-    parser.add_argument('-c', metavar='component', nargs='?', required=False, const='identity', help='Test by component. Default: identity.',)
+    parser.add_argument('-c', '--component', nargs='?', required=False, const='identity', help='Test by component. Default: identity.',)
     parser.add_argument('-u', '--user_name', required=True, help='SSH Username',)
     parser.add_argument('-n', '--node_list', required=True, help='Path to node list',)
     args = parser.parse_args()
@@ -888,8 +900,8 @@ def main(gargoyleFunctions):
     else:
         username = args.user_name
 
-    if args.c is not None:
-        singleComponent = args.c
+    if args.component is not None:
+        singleComponent = args.component
     else:
         singleComponent = False
 
@@ -936,18 +948,17 @@ def main(gargoyleFunctions):
         # Set hostname for check selection
         securityChecks[host] = []
 
-        securityChecks[host].append(commonHandler.getChecks(singleComponent))
         # Fill up host dictionary with checks
-#        if singleTest:
-#            securityChecks[host].append(list(checkHandler.getChecks(singleTest)))
-#        else:
-#            securityChecks[host].append(list(checkHandler.getChecks('identity')))
-#            securityChecks[host].append(list(checkHandler.getChecks('dashboard')))
-#            securityChecks[host].append(list(checkHandler.getChecks('compute')))
-#            securityChecks[host].append(list(checkHandler.getChecks('blockStorage')))
-#            securityChecks[host].append(list(checkHandler.getChecks('objectStorage')))
-#            securityChecks[host].append(list(checkHandler.getChecks('networking')))
-#            securityChecks[host].append(list(checkHandler.getChecks('imageStorage')))
+        if singleTest:
+            securityChecks[host].append(checkHandler.getChecks(singleTest))
+        else:
+            securityChecks[host].append(checkHandler.getChecks('identity'))
+            securityChecks[host].append(checkHandler.getChecks('dashboard'))
+            securityChecks[host].append(checkHandler.getChecks('compute'))
+            securityChecks[host].append(checkHandler.getChecks('blockStorage'))
+            securityChecks[host].append(checkHandler.getChecks('objectStorage'))
+            securityChecks[host].append(checkHandler.getChecks('networking'))
+            securityChecks[host].append(checkHandler.getChecks('imageStorage'))
 
     # Loop through accumulated checks for injection
     for host, checkList in securityChecks.items():
