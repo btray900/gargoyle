@@ -120,7 +120,7 @@ INSERT INTO `securityChecks` VALUES (57,'blockStorage','02','filePermissions','/
 
 INSERT INTO `securityChecks` VALUES (59,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/rootwrap.conf','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (71,'blockStorage','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/cinder/cinder.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for cinder resource',1);
+INSERT INTO `securityChecks` VALUES (60,'blockStorage','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/cinder/cinder.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for cinder resource',1);
 
 INSERT INTO `securityChecks` VALUES (61,'blockStorage','04a','authURI','/bin/grep -E','^auth_uri\\s*=\\s*.*','/etc/cinder/cinder.conf','auth_uri = https://[identity-api]','https','','checkValueConfigParameter','Check auth URI for cinder resource',1);
 
