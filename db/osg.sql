@@ -104,23 +104,23 @@ INSERT INTO `securityChecks` VALUES (43,'identity','08','tokenProvider','/bin/gr
 
 # blockStorage - Cinder
 
-INSERT INTO `securityChecks` VALUES (43,'blockStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\scinder','/etc/cinder/cinder.conf','root cinder','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (45,'blockStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\scinder','/etc/cinder/cinder.conf','root cinder','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (45,'blockStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\scinder','/etc/cinder/api-paste.ini','root cinder','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (47,'blockStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\scinder','/etc/cinder/api-paste.ini','root cinder','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (47,'blockStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\scinder','/etc/cinder/policy.json','root cinder','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (49,'blockStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\scinder','/etc/cinder/policy.json','root cinder','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (49,'blockStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\scinder','/etc/cinder/rootwrap.conf','root cinder','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (51,'blockStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\scinder','/etc/cinder/rootwrap.conf','root cinder','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (51,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/cinder.conf','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (53,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/cinder.conf','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (53,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/api-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (55,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/api-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (55,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/policy.json','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (57,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/policy.json','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (57,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/rootwrap.conf','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (59,'blockStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/cinder/rootwrap.conf','640','','','checkFileSystemSecurity','Check file permissions on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (59,'blockStorage','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/cinder/cinder.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for cinder resource',1);
+INSERT INTO `securityChecks` VALUES (71,'blockStorage','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/cinder/cinder.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for cinder resource',1);
 
 INSERT INTO `securityChecks` VALUES (61,'blockStorage','04a','authURI','/bin/grep -E','^auth_uri\\s*=\\s*.*','/etc/cinder/cinder.conf','auth_uri = https://[identity-api]','https','','checkValueConfigParameter','Check auth URI for cinder resource',1);
 
@@ -136,169 +136,169 @@ INSERT INTO `securityChecks` VALUES (71,'blockStorage','07a','secureNasPermissio
 
 INSERT INTO `securityChecks` VALUES (73,'blockStorage','07b','secureNasOperations','/bin/grep -E','^nas_secure_file_operations\\s*=\\s*.*','/etc/cinder/cinder.conf','nas_secure_file_operations = true','true','','checkValueConfigParameter','Check cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (57,'blockStorage','08a','osapiMaxRequestBodySize','/bin/grep -E','^osapi_max_request_body_size\\s*=\\s*.*','/etc/cinder/cinder.conf','osapi_max_request_body_size = 114688 ###or greater###','114688','gte','checkIntConfigParameter','Check osapi max request body size on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (75,'blockStorage','08a','osapiMaxRequestBodySize','/bin/grep -E','^osapi_max_request_body_size\\s*=\\s*.*','/etc/cinder/cinder.conf','osapi_max_request_body_size = 114688 ###or greater###','114688','gte','checkIntConfigParameter','Check osapi max request body size on cinder resource',1);
 
-INSERT INTO `securityChecks` VALUES (58,'blockStorage','08b','maxRequestBodySize','/bin/grep -E','^max_request_body_size\\s*=\\s*.*','/etc/cinder/cinder.conf','max_request_body_size = 114688 ###or greater###','114688','gte','checkIntConfigParameter','Check max request body size on cinder resource',1);
+INSERT INTO `securityChecks` VALUES (77,'blockStorage','08b','maxRequestBodySize','/bin/grep -E','^max_request_body_size\\s*=\\s*.*','/etc/cinder/cinder.conf','max_request_body_size = 114688 ###or greater###','114688','gte','checkIntConfigParameter','Check max request body size on cinder resource',1);
 
 
 # imageStorage - glance
 
-INSERT INTO `securityChecks` VALUES (61,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-api.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (81,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-api.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (63,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-api-paste.ini','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (83,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-api-paste.ini','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (65,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-cache.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (85,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-cache.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (67,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-manage.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (87,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-manage.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (69,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-registry-paste.ini','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (89,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-registry-paste.ini','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (71,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-registry.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (91,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-registry.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (73,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-scrubber.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (93,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-scrubber.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (75,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-swift-store.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (95,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/glance-swift-store.conf','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (77,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/policy.json','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (97,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/policy.json','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (79,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/schema-image.json','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (99,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/schema-image.json','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (81,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/schema.json','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (101,'imageStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sglance','/etc/glance/schema.json','root glance','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (83,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-api.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (103,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-api.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (85,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-api-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (105,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-api-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (87,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-cache.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (107,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-cache.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (89,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-manage.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (109,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-manage.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (91,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-registry-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (111,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-registry-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (93,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-registry.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (113,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-registry.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (95,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-scrubber.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (115,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-scrubber.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (97,'imageStorage','01','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-swift-store.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (117,'imageStorage','01','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/glance-swift-store.conf','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (99,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/policy.json','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (119,'imageStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/policy.json','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (101,'imageStorage','01','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/schema-image.json','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (121,'imageStorage','01','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/schema-image.json','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (103,'imageStorage','01','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/schema.json','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
+INSERT INTO `securityChecks` VALUES (123,'imageStorage','01','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/glance/schema.json','640','','','checkFileSystemSecurity','Check file permissions on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (105,'imageStorage','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/glance/glance-api.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for glance resource',1);
+INSERT INTO `securityChecks` VALUES (125,'imageStorage','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/glance/glance-api.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (107,'imageStorage','04a','authURI','/bin/grep -E','^auth_uri\\s*=\\s*.*','/etc/glance/glance-api.conf','auth_uri = https://[identity-api]','https','','checkValueConfigParameter','Check auth URI for glance resource',1);
+INSERT INTO `securityChecks` VALUES (127,'imageStorage','04a','authURI','/bin/grep -E','^auth_uri\\s*=\\s*.*','/etc/glance/glance-api.conf','auth_uri = https://[identity-api]','https','','checkValueConfigParameter','Check auth URI for glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (109,'imageStorage','04b','secureAuthProtocol','/bin/grep -E','^insecure\\s*=\\s*.*','/etc/glance/glance-api.conf','insecure = false','false','','checkValueConfigParameter','Check secure auth protocol on glance resource',1);
+INSERT INTO `securityChecks` VALUES (129,'imageStorage','04b','secureAuthProtocol','/bin/grep -E','^insecure\\s*=\\s*.*','/etc/glance/glance-api.conf','insecure = false','false','','checkValueConfigParameter','Check secure auth protocol on glance resource',1);
 
-INSERT INTO `securityChecks` VALUES (111,'imageStorage','05','protectCopyFrom','/bin/grep -E','.*copy_from.*','/etc/glance/policy.json','\"copy_from\": \"rule: admin_create\"','admin_create','','checkSubstrConfigParameter','Check restricted copy_from directive on glance resource',1);
+INSERT INTO `securityChecks` VALUES (121,'imageStorage','05','protectCopyFrom','/bin/grep -E','.*copy_from.*','/etc/glance/policy.json','\"copy_from\": \"rule: admin_create\"','admin_create','','checkSubstrConfigParameter','Check restricted copy_from directive on glance resource',1);
 
 
 # dashboard - horizon
 
-INSERT INTO `securityChecks` VALUES (113,'dashboard','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\shorizon','/etc/openstack-dashboard/local_settings.py','root horizon','','','checkFileSystemSecurity','Check file permissions on horizon resource',1);
+INSERT INTO `securityChecks` VALUES (133,'dashboard','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\shorizon','/etc/openstack-dashboard/local_settings.py','root horizon','','','checkFileSystemSecurity','Check file permissions on horizon resource',1);
 
-INSERT INTO `securityChecks` VALUES (115,'dashboard','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/openstack-dashboard/local_settings.py','640','','','checkFileSystemSecurity','Check file permissions on horizon resource',1);
+INSERT INTO `securityChecks` VALUES (135,'dashboard','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/openstack-dashboard/local_settings.py','640','','','checkFileSystemSecurity','Check file permissions on horizon resource',1);
 
-INSERT INTO `securityChecks` VALUES (117,'dashboard','03','disallowIframeEmbed','/bin/grep -E','^DISALLOW_IFRAME_EMBED\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','DISALLOW_IFRAME_EMBED = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
+INSERT INTO `securityChecks` VALUES (137,'dashboard','03','disallowIframeEmbed','/bin/grep -E','^DISALLOW_IFRAME_EMBED\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','DISALLOW_IFRAME_EMBED = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
 
-INSERT INTO `securityChecks` VALUES (119,'dashboard','04','csrfCookieSecure','/bin/grep -E','^CSRF_COOKIE_SECURE\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','CSRF_COOKIE_SECURE = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
+INSERT INTO `securityChecks` VALUES (139,'dashboard','04','csrfCookieSecure','/bin/grep -E','^CSRF_COOKIE_SECURE\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','CSRF_COOKIE_SECURE = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
 
-INSERT INTO `securityChecks` VALUES (121,'dashboard','05','sessionCookieSecure','/bin/grep -E','^SESSION_COOKIE_SECURE\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','SESSION_COOKIE_SECURE = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
+INSERT INTO `securityChecks` VALUES (141,'dashboard','05','sessionCookieSecure','/bin/grep -E','^SESSION_COOKIE_SECURE\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','SESSION_COOKIE_SECURE = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
 
-INSERT INTO `securityChecks` VALUES (123,'dashboard','06','sessionCookieHttponly','/bin/grep -E','^SESSION_COOKIE_HTTPONLY\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','SESSION_COOKIE_HTTPONLY = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
+INSERT INTO `securityChecks` VALUES (143,'dashboard','06','sessionCookieHttponly','/bin/grep -E','^SESSION_COOKIE_HTTPONLY\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','SESSION_COOKIE_HTTPONLY = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
 
-INSERT INTO `securityChecks` VALUES (125,'dashboard','07','passwordAutocomplete','/bin/grep -E','^PASSWORD_AUTOCOMPLETE\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','PASSWORD_AUTOCOMPLETE = False','false','','checkValueConfigParameter','Check setting for horizon resource',1);
+INSERT INTO `securityChecks` VALUES (145,'dashboard','07','passwordAutocomplete','/bin/grep -E','^PASSWORD_AUTOCOMPLETE\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','PASSWORD_AUTOCOMPLETE = False','false','','checkValueConfigParameter','Check setting for horizon resource',1);
 
-INSERT INTO `securityChecks` VALUES (127,'dashboard','08','disablePasswordReveal','/bin/grep -E','^DISABLE_PASSWORD_REVEAL\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','DISABLE_PASSWORD_REVEAL = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
+INSERT INTO `securityChecks` VALUES (147,'dashboard','08','disablePasswordReveal','/bin/grep -E','^DISABLE_PASSWORD_REVEAL\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','DISABLE_PASSWORD_REVEAL = True','true','','checkValueConfigParameter','Check setting for horizon resource',1);
 
-INSERT INTO `securityChecks` VALUES (129,'dashboard','09','enforePasswordCheck','/bin/grep -E','^ENFORCE_PASSWORD_CHECK\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','ENFORCE_PASSWORD_CHECK = True','true','','checkValueConfigParameter','Check setting for horizon resource.',1);
+INSERT INTO `securityChecks` VALUES (149,'dashboard','09','enforePasswordCheck','/bin/grep -E','^ENFORCE_PASSWORD_CHECK\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','ENFORCE_PASSWORD_CHECK = True','true','','checkValueConfigParameter','Check setting for horizon resource.',1);
 
-INSERT INTO `securityChecks` VALUES (131,'dashboard','11','secureProxySslHeader','/bin/grep -E','^SECURE_PROXY_SSL_HEADER\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','SECURE_PROXY_SSL_HEADER = (\'HTTP_X_FORWARDED_PROTOCOL\', \'https\')','https','','checkValueConfigParameter','Check setting for horizon resource',1);
+INSERT INTO `securityChecks` VALUES (151,'dashboard','11','secureProxySslHeader','/bin/grep -E','^SECURE_PROXY_SSL_HEADER\\s*=\\s*.*','/etc/openstack-dashboard/local_settings.py','SECURE_PROXY_SSL_HEADER = (\'HTTP_X_FORWARDED_PROTOCOL\', \'https\')','https','','checkValueConfigParameter','Check setting for horizon resource',1);
 
 
 # networking - neutron
 
-INSERT INTO `securityChecks` VALUES (133,'networking','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sneutron','/etc/neutron/neutron.conf','root neutron','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (153,'networking','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sneutron','/etc/neutron/neutron.conf','root neutron','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (135,'networking','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sneutron','/etc/neutron/api-paste.ini','root neutron','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (155,'networking','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sneutron','/etc/neutron/api-paste.ini','root neutron','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (137,'networking','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sneutron','/etc/neutron/policy.json','root neutron','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (157,'networking','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sneutron','/etc/neutron/policy.json','root neutron','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (139,'networking','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sneutron','/etc/neutron/rootwrap.conf','root neutron','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (159,'networking','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sneutron','/etc/neutron/rootwrap.conf','root neutron','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (141,'networking','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/neutron/neutron.conf','640','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (161,'networking','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/neutron/neutron.conf','640','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (143,'networking','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/neutron/api-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (163,'networking','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/neutron/api-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (145,'networking','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/neutron/policy.json','640','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (165,'networking','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/neutron/policy.json','640','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (147,'networking','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/neutron/rootwrap.conf','640','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (167,'networking','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/neutron/rootwrap.conf','640','','','checkFileSystemSecurity','Check file permissions on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (149,'networking','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/neutron/neutron.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for neutron resource',1);
+INSERT INTO `securityChecks` VALUES (169,'networking','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/neutron/neutron.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (151,'networking','04a','authURI','/bin/grep -E','^auth_uri\\s*=\\s*.*','/etc/neutron/neutron.conf','auth_uri = https://[identity-api]','https','','checkValueConfigParameter','Check auth URI for neutron resource',1);
+INSERT INTO `securityChecks` VALUES (171,'networking','04a','authURI','/bin/grep -E','^auth_uri\\s*=\\s*.*','/etc/neutron/neutron.conf','auth_uri = https://[identity-api]','https','','checkValueConfigParameter','Check auth URI for neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (153,'networking','04b','secureAuthProtocol','/bin/grep -E','^insecure\\s*=\\s*.*','/etc/neutron/neutron.conf','insecure = false','false','','checkValueConfigParameter','Check secure auth protocol on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (173,'networking','04b','secureAuthProtocol','/bin/grep -E','^insecure\\s*=\\s*.*','/etc/neutron/neutron.conf','insecure = false','false','','checkValueConfigParameter','Check secure auth protocol on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (155,'networking','05','useSsl','/bin/grep -E','^use_ssl\\s*=\\s*.*','/etc/neutron/neutron.conf','use_ssl = true','true','','checkValueConfigParameter','Check nova api secure on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (175,'networking','05','useSsl','/bin/grep -E','^use_ssl\\s*=\\s*.*','/etc/neutron/neutron.conf','use_ssl = true','true','','checkValueConfigParameter','Check nova api secure on neutron resource',1);
 
-INSERT INTO `securityChecks` VALUES (157,'networking','ap','authProtocol','/bin/grep -E','^auth_protocol\\s*=\\s*.*','/etc/neutron/neutron.conf','auth_protocol = https','https','','checkValueConfigParameter','Check auth protocol on neutron resource',1);
+INSERT INTO `securityChecks` VALUES (177,'networking','ap','authProtocol','/bin/grep -E','^auth_protocol\\s*=\\s*.*','/etc/neutron/neutron.conf','auth_protocol = https','https','','checkValueConfigParameter','Check auth protocol on neutron resource',1);
 
 
 # Compute - nova
 
-INSERT INTO `securityChecks` VALUES (159,'compute','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\snova','/etc/nova/nova.conf','root nova','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
+INSERT INTO `securityChecks` VALUES (179,'compute','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\snova','/etc/nova/nova.conf','root nova','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (161,'compute','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\snova','/etc/nova/api-paste.ini','root nova','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
+INSERT INTO `securityChecks` VALUES (181,'compute','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\snova','/etc/nova/api-paste.ini','root nova','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (163,'compute','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\snova','/etc/nova/policy.json','root nova','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
+INSERT INTO `securityChecks` VALUES (183,'compute','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\snova','/etc/nova/policy.json','root nova','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (165,'compute','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\snova','/etc/nova/rootwrap.conf','root nova','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
+INSERT INTO `securityChecks` VALUES (185,'compute','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\snova','/etc/nova/rootwrap.conf','root nova','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (167,'compute','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/nova/nova.conf','640','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
+INSERT INTO `securityChecks` VALUES (187,'compute','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/nova/nova.conf','640','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (169,'compute','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/nova/api-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
+INSERT INTO `securityChecks` VALUES (189,'compute','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/nova/api-paste.ini','640','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (171,'compute','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/nova/policy.json','640','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
+INSERT INTO `securityChecks` VALUES (191,'compute','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/nova/policy.json','640','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (173,'compute','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/nova/rootwrap.conf','640','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
+INSERT INTO `securityChecks` VALUES (193,'compute','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/nova/rootwrap.conf','640','','','checkFileSystemSecurity','Check file permissions on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (175,'compute','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/nova/nova.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for nova resource',1);
+INSERT INTO `securityChecks` VALUES (195,'compute','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/nova/nova.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (177,'compute','04a','authURI','/bin/grep -E','^auth_uri\\s*=\\s*.*','/etc/nova/nova.conf','auth_uri = https://[identity-api]','https','','checkValueConfigParameter','Check auth URI for nova resource',1);
+INSERT INTO `securityChecks` VALUES (197,'compute','04a','authURI','/bin/grep -E','^auth_uri\\s*=\\s*.*','/etc/nova/nova.conf','auth_uri = https://[identity-api]','https','','checkValueConfigParameter','Check auth URI for nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (179,'compute','04b','secureAuthProtocol','/bin/grep -E','^insecure\\s*=\\s*.*','/etc/nova/nova.conf','insecure = false','false','','checkValueConfigParameter','Check secure auth protocol on nova resource',1);
+INSERT INTO `securityChecks` VALUES (199,'compute','04b','secureAuthProtocol','/bin/grep -E','^insecure\\s*=\\s*.*','/etc/nova/nova.conf','insecure = false','false','','checkValueConfigParameter','Check secure auth protocol on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (181,'compute','05a','apiInsecure','/bin/grep -E','^api_insecure\\s*=\\s*.*','/etc/nova/nova.conf','api_insecure = false','false','','checkValueConfigParameter','Check nova api secure on nova resource',1);
+INSERT INTO `securityChecks` VALUES (191,'compute','05a','apiInsecure','/bin/grep -E','^api_insecure\\s*=\\s*.*','/etc/nova/nova.conf','api_insecure = false','false','','checkValueConfigParameter','Check nova api secure on nova resource',1);
 
-INSERT INTO `securityChecks` VALUES (183,'compute','05b','apiServers','/bin/grep -E','^api_servers\\s*=\\s*.*','/etc/nova/nova.conf','api_servers = https://[image-api]','https','','checkValueConfigParameter','Check nova api secure on nova resource',1);
+INSERT INTO `securityChecks` VALUES (193,'compute','05b','apiServers','/bin/grep -E','^api_servers\\s*=\\s*.*','/etc/nova/nova.conf','api_servers = https://[image-api]','https','','checkValueConfigParameter','Check nova api secure on nova resource',1);
 
 
 # objectStorage - swift
 
-INSERT INTO `securityChecks` VALUES (185,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/account.builder','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (205,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/account.builder','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (187,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/container.builder','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (207,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/container.builder','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (189,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/object.builder','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (209,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/object.builder','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (191,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/proxy-server.conf','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (211,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/proxy-server.conf','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (193,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/swift.conf','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (213,'objectStorage','01','fileOwnership','/usr/bin/stat -L -c \\\"%U %G\\\"','root\\sswift','/etc/swift/swift.conf','root swift','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (195,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/account.builder','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (215,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/account.builder','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (197,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/container.builder','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (217,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/container.builder','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (199,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/object.builder','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (219,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/object.builder','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (201,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/proxy-server.conf','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (221,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/proxy-server.conf','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (203,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/swift.conf','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
+INSERT INTO `securityChecks` VALUES (223,'objectStorage','02','filePermissions','/usr/bin/stat -L -c \\\"%a\\\"','640','/etc/swift/swift.conf','640','','','checkFileSystemSecurity','Check file permissions on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (205,'objectStorage','ap','authProtocol','/bin/grep -E','^auth_protocol\\s*=\\s*.*','/etc/swift/proxy-server.conf','auth_protocol = https','https','','checkValueConfigParameter','Check auth protocol on swift resource',1);
+INSERT INTO `securityChecks` VALUES (225,'objectStorage','ap','authProtocol','/bin/grep -E','^auth_protocol\\s*=\\s*.*','/etc/swift/proxy-server.conf','auth_protocol = https','https','','checkValueConfigParameter','Check auth protocol on swift resource',1);
 
-INSERT INTO `securityChecks` VALUES (207,'objectStorage','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/swift/swift.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for swift resource',1);
+INSERT INTO `securityChecks` VALUES (227,'objectStorage','03','authStrategy','/bin/grep -E','^auth_strategy\\s*=\\s*.*','/etc/swift/swift.conf','auth_strategy = keystone','keystone','','checkValueConfigParameter','Check auth strategy for swift resource',1);
