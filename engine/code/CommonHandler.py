@@ -176,7 +176,7 @@ class CommonHandler:
         s.load_system_host_keys()
 
         try:
-            print(sshCommand)
+#            print(sshCommand)
             s.connect(host, username=self.username, timeout=5)
             (stdin, stdout, stderr) = s.exec_command(sshCommand) # nosec
             lines = stdout.readlines()

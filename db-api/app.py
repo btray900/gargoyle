@@ -28,6 +28,29 @@ columns = [
 'valueLogic',
 ]
 
+# GET components for argparse
+
+@app.route('/api/v1/components', methods=['GET'])
+def all_components():
+    try:
+        db = pymysql.connect(dbHost, uid, pw, database)
+        cursor = db.cursor(pymysql.cursors.DictCursor)
+        cursor.execute('SELECT DISTINCT component FROM %s' % checkTable)
+        rows = cursor.fetchall()
+        components = ''
+        for row in rows:
+            components += '%s,' % row['component']
+        message = {'status': 'OK', 'payload': components.strip(',')}
+        resp = jsonify(message)
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        db.close()
+
+
 # READ checks
 @app.route('/api/v1/checks', methods=['GET'])
 def all_checks():
