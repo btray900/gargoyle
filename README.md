@@ -10,6 +10,23 @@ can produce PDF results for those who love hard copy.
 
 Copy private key to ./engine/id_rsa before building the first time.
 
+## Create docker volumes for any container to persist data
+
+Default is a volume for elasticsearch and the engine /var/log
+
+## Create passwords for Elastic X-Pack and other service users
+
+### MAKE NEW PASSWORDS ON FIRST RUN OR IF g-esdata VOLUME DELETED, WHICH SHOULD RARELY BE DONE
+docker exec -i g-es /bin/bash -c '/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto' | grep PASSWORD > .gargoyle.creds
+
+python3 make_rc.py
+
+# set env vars
+
+source ./.gargoylerc
+
+
+
 ## Update sysctl or Elasticsearch may have issues
 
 Check and set on docker host first to 262144 or higher

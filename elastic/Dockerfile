@@ -5,10 +5,10 @@ COPY ./elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
 RUN mkdir -p /opt/es_data
 RUN mkdir -p /var/log/elasticsearch
 
-COPY ./svtRootCA.crt.pem /usr/share/elasticsearch/config/
-COPY ./svtRootCA.crt.pem /etc/ssl/certs/
-COPY ./svtServer.crt.pem /usr/share/elasticsearch/config/
-COPY ./svtServer.key.pem /usr/share/elasticsearch/config/
+COPY ./gargoyleRootCA.crt.pem /usr/share/elasticsearch/config/
+COPY ./gargoyleRootCA.crt.pem /etc/ssl/certs/
+COPY ./gargoyleServer.crt.pem /usr/share/elasticsearch/config/
+COPY ./gargoyleServer.key.pem /usr/share/elasticsearch/config/
 
 RUN chown -R elasticsearch:elasticsearch /opt/es_data
 RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch
