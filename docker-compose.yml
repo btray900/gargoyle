@@ -1,41 +1,69 @@
 version: '3'
 services:
   db:
-    container_name: db
     build: ./db
+    container_name: g-db
+    image: g-db
+    hostname: g-db
+    environment:
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - DB_USER=${DB_USER}
+        - DB_PW=${DB_PW}
+    networks:
+        gargoyle:
+            ipv4_address: 172.23.0.2
+    extra_hosts:
+        - "g-api:172.23.0.3"
+        - "g-engine:172.23.0.4"
+        - "g-es:172.23.0.5"
+        - "g-kibana:172.23.0.6"
     restart: always
 
-  db-api:
-    container_name: api
-    build: ./db-api
+  api:
+    build: ./api
+    container_name: g-api
+    hostname: g-api
+    image: g-api
+    environment:
+        - DB_USER=${DB_USER}
+        - DB_PW=${DB_PW}
+        - API_USER=${API_USER}
+        - API_PW=${API_PW}
+    networks:
+        gargoyle:
+            ipv4_address: 172.23.0.3
     ports:
       - "15000:5000"
+    extra_hosts:
+        - "g-db:172.23.0.2"
+        - "g-engine:172.23.0.4"
+        - "g-es:172.23.0.5"
+        - "g-kibana:172.23.0.6"
     restart: always
 
-  engine:
-    container_name: engine
-    build: ./engine
-    restart: always
+#  engine:
+#    container_name: g-engine
+#    build: ./engine
+#    restart: always
 
-  es-master:
-    container_name: es-master
-    build: ./es-master
-    restart: always
+#  elastic:
+#    container_name: g-elastic
+#    build: ./es-master
+#    restart: always
 
-  es-data:
-    container_name: es-data
-    build: ./es-data
-    restart: always
+#  kibana:
+#    container_name: g-kibana
+#    build: ./kibana
+#    ports:
+#      - "15601:5601"
+#    restart: always
 
-  kibana:
-    container_name: kibana
-    build: ./kibana
-    ports:
-      - "15601:5601"
-    restart: always
-
+#networks:
+#  default:
+#    external:
+#      name: gargoyle-net
 networks:
-  default:
-    external:
-      name: gargoyle-net
-
+  gargoyle:
+    ipam:
+      config:
+        - subnet: 172.23.0.0/28

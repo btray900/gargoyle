@@ -1,10 +1,10 @@
 # osg base db 
 DROP DATABASE IF EXISTS osg;
 CREATE DATABASE osg;
-GRANT SELECT ON osg.* TO 'osg'@'%' IDENTIFIED BY 'xxxFAKEPASSWDxxx';
+GRANT ALL ON osg.* TO 'osg'@"%" IDENTIFIED BY 'xxxFAKEPASSWDxxx' REQUIRE X509;
+ALTER USER root REQUIRE X509;'
+FLUSH PRIVILEGES;
+
 USE osg;
 
-
 # CAT from mysqldump start here
-
-
