@@ -5,11 +5,11 @@ node.name: g-elastic-node-1
 path.data: /opt/es_data
 path.logs: /var/log/elasticsearch
 
-network.host: g-es
-network.publish_host: g-es
+network.host: g-elastic
+network.publish_host: g-elastic
 
 discovery.zen.minimum_master_nodes: 1
-discovery.zen.ping.unicast.hosts: [ "g-es" ]
+discovery.zen.ping.unicast.hosts: [ "g-elastic" ]
 
 node.master: true
 node.data: true 

@@ -14,7 +14,7 @@ xpack.monitoring.elasticsearch.username: "${ELASTIC_USER}"
 xpack.monitoring.elasticsearch.password: "${ELASTIC_PW}"
 xpack.monitoring.kibana.collection.enabled: true
 
-elasticsearch.hosts: ["https://g-es:9200"]
+elasticsearch.hosts: ["https://g-elastic:9200"]
 elasticsearch.username: "${ELASTIC_USER}"
 elasticsearch.password: "${ELASTIC_PW}"
 

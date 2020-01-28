@@ -4,22 +4,21 @@ services:
 
   elastic:
     build: ./elastic
-    container_name: g-es
-    hostname: g-es
-    image: g-es
-    environment:
-      - ELASTIC_USER=${ELASTIC_USER}
-      - ELASTIC_PW=${ELASTIC_PW}
+    container_name: g-elastic
+    hostname: g-elastic
+    image: g-elastic
     networks:
       gargoyle:
         ipv4_address: 172.23.0.5
+    ports:
+      - "59200:9200"
     extra_hosts:
       - "g-db:172.23.0.2"
       - "g-engine:172.23.0.4"
       - "g-api:172.23.0.3"
       - "g-kibana:172.23.0.6"
     volumes:
-      - g-elastic:/opt/es-data
+      - g-elastic_vol:/opt/es-data
     restart: always
 
 
@@ -41,7 +40,7 @@ services:
     extra_hosts:
       - "g-api:172.23.0.3"
       - "g-engine:172.23.0.4"
-      - "g-es:172.23.0.5"
+      - "g-elastic:172.23.0.5"
       - "g-kibana:172.23.0.6"
     restart: always
 
@@ -60,11 +59,11 @@ services:
       gargoyle:
         ipv4_address: 172.23.0.3
     ports:
-      - "15000:5000"
+      - "55000:5000"
     extra_hosts:
       - "g-db:172.23.0.2"
       - "g-engine:172.23.0.4"
-      - "g-es:172.23.0.5"
+      - "g-elastic:172.23.0.5"
       - "g-kibana:172.23.0.6"
     restart: always
 
@@ -81,12 +80,12 @@ services:
       gargoyle:
         ipv4_address: 172.23.0.6
     ports:
-      - "15601:5601"
+      - "55601:5601"
     extra_hosts:
       - "g-db:172.23.0.2"
       - "g-engine:172.23.0.4"
       - "g-api:172.23.0.3"
-      - "g-es:172.23.0.5"
+      - "g-elastic:172.23.0.5"
     restart: always
 
 #  engine:
@@ -102,5 +101,5 @@ networks:
         - subnet: 172.23.0.0/28
 
 volumes:
-  g-elastic:
+  g-elastic_vol:
     external: true
