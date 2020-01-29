@@ -57,20 +57,20 @@ def listener(commonHandler, queue):
     return
 
 
-def variableWorker(gargoyleFunctions, 
-                   isSudoWhitelistCmd, 
-                   commonHandler, 
-                   queue, 
-                   component, 
-                   checkID, 
-                   checkTask, 
-                   command, 
-                   regex, 
-                   resource, 
-                   expected, 
-                   checkValue, 
-                   valueLogic, 
-                   host, 
+def variableWorker(gargoyleFunctions,
+                   isSudoWhitelistCmd,
+                   commonHandler,
+                   queue,
+                   component,
+                   checkID,
+                   checkTask,
+                   command,
+                   regex,
+                   resource,
+                   expected,
+                   checkValue,
+                   valueLogic,
+                   host,
                    fkFunction):
     '''
     gargoyleFunctions are used to compare to the DB fkFunction field. On
@@ -99,17 +99,17 @@ def variableWorker(gargoyleFunctions,
         # if FK matches global function name
         if funcName == fkFunction:
             # Call the function string matched object
-            logOutput = funcObject(commonHandler, 
-                                   isSudoWhitelistCmd, 
-                                   component, 
-                                   checkID, 
-                                   checkTask, 
-                                   command, 
-                                   regex, 
-                                   resource, 
-                                   expected, 
-                                   checkValue, 
-                                   valueLogic, 
+            logOutput = funcObject(commonHandler,
+                                   isSudoWhitelistCmd,
+                                   component,
+                                   checkID,
+                                   checkTask,
+                                   command,
+                                   regex,
+                                   resource,
+                                   expected,
+                                   checkValue,
+                                   valueLogic,
                                    host)
 
     queue.put(logOutput)

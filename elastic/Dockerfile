@@ -20,6 +20,4 @@ EXPOSE 9200 9300
 
 USER elasticsearch
 
-ENV ES_JAVA_OPTS -Des.http.cname_in_publish_address=true
-
 CMD /usr/share/elasticsearch/bin/elasticsearch

@@ -30,7 +30,7 @@ for line in lines:
 
 apiPassword = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(20))
 
-rc.write('export API_USER=svtapi\n')
+rc.write('export API_USER=gargoyle\n')
 rc.write('export API_PW=%s\n' % apiPassword)
 
 dbUserPassword = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(20))

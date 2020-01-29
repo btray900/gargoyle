@@ -7,6 +7,16 @@ services:
     container_name: g-elastic
     hostname: g-elastic
     image: g-elastic
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m -Des.http.cname_in_publish_address=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
     networks:
       gargoyle:
         ipv4_address: 172.23.0.5
@@ -88,10 +98,34 @@ services:
       - "g-elastic:172.23.0.5"
     restart: always
 
-#  engine:
-#    container_name: g-engine
-#    build: ./engine
-#    restart: always
+
+  engine:
+    build: ./engine
+    container_name: g-engine
+    hostname: g-engine
+    image: g-engine
+    environment:
+      - ELASTIC_USER=${ELASTIC_USER}
+      - ELASTIC_PW=${ELASTIC_PW}
+      - KIBANA_USER=${KIBANA_USER}
+      - KIBANA_PW=${KIBANA_PW}
+      - API_USER=${API_USER}
+      - API_PW=${API_PW}
+      - DB_USER=${DB_USER}
+      - DB_PW=${DB_PW}
+      - DB_ROOT_USER=${DB_ROOT_USER}
+      - DB_ROOT_PW=${DB_ROOT_PW}
+    networks:
+      gargoyle:
+        ipv4_address: 172.23.0.4
+    extra_hosts:
+      - "g-db:172.23.0.2"
+      - "g-kibana:172.23.0.6"
+      - "g-api:172.23.0.3"
+      - "g-elastic:172.23.0.5"
+    volumes:
+      - g-engine_vol:/var/log/gargoyle
+    restart: always
 
 
 networks:
@@ -102,4 +136,6 @@ networks:
 
 volumes:
   g-elastic_vol:
+    external: true
+  g-engine_vol:
     external: true

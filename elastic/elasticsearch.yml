@@ -25,7 +25,7 @@ xpack.security.enabled: true
 xpack.security.transport.ssl.enabled: true
 xpack.security.http.ssl.enabled: true
 xpack.security.audit.enabled: true
-xpack.security.audit.outputs: [ index, logfile ]
+xpack.security.audit.outputs: [ logfile ]
 
 xpack.monitoring.enabled: true
 xpack.monitoring.collection.enabled: true
