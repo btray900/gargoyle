@@ -16,7 +16,7 @@ Default is a volume for elasticsearch and the engine /var/log
 
 ## Create passwords for Elastic X-Pack and other service users
 
-### MAKE NEW PASSWORDS ON FIRST RUN OR IF g-esdata VOLUME DELETED, WHICH SHOULD RARELY BE DONE
+*MAKE NEW PASSWORDS ON FIRST RUN OR IF g-esdata VOLUME DELETED, WHICH SHOULD RARELY BE DONE*
 
 `docker exec -i g-elastic /bin/bash -c '/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto' | grep PASSWORD > .gargoyle.creds`
 
@@ -25,7 +25,6 @@ Default is a volume for elasticsearch and the engine /var/log
 ## Set environment vars
 
 `source ./.gargoylerc`
-
 
 ## Update sysctl or Elasticsearch may have issues
 
@@ -53,7 +52,11 @@ __root ca key__
 
 __root ca SAN cert__
 
-`openssl req -new -x509 -extensions v3_ca -days 3650 -key gargoyleRootCA.key.pem -sha256 -out gargoyleRootCA.crt.pem -config sslGARGOYLE.cnf`
+`openssl req -new -x509 -extensions v3_ca -days 3650 \`
+
+`-key gargoyleRootCA.key.pem -sha256 -out gargoyleRootCA.crt.pem \`
+
+`-config sslGARGOYLE.cnf`
 
 *Common Name (e.g. server FQDN or YOUR name) []:gargoyleCA   <-- cannot match server certificate CommonName*
 
@@ -63,15 +66,20 @@ __server key__
 
 __create csr to be signed__
 
-`openssl req -extensions v3_req -sha256 -new -key gargoyleServer.key.pem -out gargoyleServer.csr -config sslGARGOYLE.cnf`
+`openssl req -extensions v3_req -sha256 -new -key gargoyleServer.key.pem \`
+
+`-out gargoyleServer.csr -config sslGARGOYLE.cnf`
 
 *Common Name (e.g. server FQDN or YOUR name) []:gargoyleServer   <--- cannot match CA certificate CommonName*
 
 __Create SAN certs signed by custom CA__
 
 `openssl x509 -req -extensions v3_req -days 3650 \`
+
 `-sha256 -in gargoyleServer.csr -CA gargoyleRootCA.crt.pem \`
+
 `-CAkey gargoyleRootCA.key.pem -CAcreateserial \`
+
 `-out gargoyleServer.crt.pem -extfile sslGARGOYLE.cnf`
 
 __Make client certs for db connections__
@@ -80,15 +88,20 @@ __Make client certs for db connections__
 
 __create client csr__
 
-`openssl req -extensions v3_req -sha256 -new -key gargoyleClientDb.key.pem -out gargoyleClientDb.csr -config sslGARGOYLE.cnf`
+`openssl req -extensions v3_req -sha256 -new -key gargoyleClientDb.key.pem \`
+
+`-out gargoyleClientDb.csr -config sslGARGOYLE.cnf`
 
 *Common Name (e.g. server FQDN or YOUR name) []:gargoyleClientDb  <--- cannot match CA certificate CommmonName*
 
 __sign client csr__
 
 `openssl x509 -req -extensions v3_req -days 1095 -sha256 \`
+
 `-in gargoyleClientDb.csr -CA gargoyleRootCA.crt.pem \`
+
 `-CAkey gargoyleRootCA.key.pem -CAcreateserial \`
+
 `-out gargoyleClientDb.crt.pem -extfile sslGARGOYLE.cnf`
 
 __check certs OK__
