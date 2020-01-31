@@ -16,9 +16,12 @@ Default is a volume for elasticsearch and the engine /var/log
 
 ## Create passwords for Elastic X-Pack and other service users
 
-*MAKE NEW PASSWORDS ON FIRST RUN OR IF g-esdata VOLUME DELETED, WHICH SHOULD RARELY BE DONE*
+__Make new password for the first run, or if the elastic vlume gets deleted.__
+
 
 `docker exec -i g-elastic /bin/bash -c '/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto' | grep PASSWORD > .gargoyle.creds`
+
+*There will be not visible output, hit 'y' then 'enter' after a few seconds to continue password creation. Then run 'make_rc'*
 
 `python3 make_rc.py`
 
