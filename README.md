@@ -17,14 +17,14 @@ Default is a volume for elasticsearch and the engine /var/log
 ## Create passwords for Elastic X-Pack and other service users
 
 ### MAKE NEW PASSWORDS ON FIRST RUN OR IF g-esdata VOLUME DELETED, WHICH SHOULD RARELY BE DONE
-docker exec -i g-elastic /bin/bash -c '/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto' | grep PASSWORD > .gargoyle.creds
 
-python3 make_rc.py
+`docker exec -i g-elastic /bin/bash -c '/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto' | grep PASSWORD > .gargoyle.creds`
 
-# set env vars
+`python3 make_rc.py`
 
-source ./.gargoylerc
+## Set environment vars
 
+`source ./.gargoylerc`
 
 
 ## Update sysctl or Elasticsearch may have issues
@@ -43,85 +43,125 @@ Check and set on docker host first to 262144 or higher
 ## Make your own certs if desired
 
 
-# Update the sslGARGOYLE.cnf IP and/or names if needed
+### Update the sslGARGOYLE.cnf IP and/or names if needed
 
-cd ./pki
+`cd ./pki`
 
-# root ca key
-openssl genrsa -out gargoyleRootCA.key.pem 2048
+__root ca key__
 
-# root ca SAN cert
-openssl req -new -x509 -extensions v3_ca -days 3650 -key gargoyleRootCA.key.pem -sha256 -out gargoyleRootCA.crt.pem -config sslGARGOYLE.cnf
+`openssl genrsa -out gargoyleRootCA.key.pem 2048`
 
-# Common Name (e.g. server FQDN or YOUR name) []:gargoyleCA   <-- cannot match server certificate CommonName
-# Email Address []:
+__root ca SAN cert__
 
-# server key
-openssl genrsa -out gargoyleServer.key.pem 2048
+`openssl req -new -x509 -extensions v3_ca -days 3650 -key gargoyleRootCA.key.pem -sha256 -out gargoyleRootCA.crt.pem -config sslGARGOYLE.cnf`
 
-# create csr to be signed
-openssl req -extensions v3_req -sha256 -new -key gargoyleServer.key.pem -out gargoyleServer.csr -config sslGARGOYLE.cnf
+*Common Name (e.g. server FQDN or YOUR name) []:gargoyleCA   <-- cannot match server certificate CommonName*
 
-# Common Name (e.g. server FQDN or YOUR name) []:gargoyleServer   <--- cannot match CA certificate CommonName
+__server key__
 
-# Create SAN certs signed by custom CA
-openssl x509 -req -extensions v3_req -days 3650 -sha256 -in gargoyleServer.csr -CA gargoyleRootCA.crt.pem -CAkey gargoyleRootCA.key.pem -CAcreateserial -out gargoyleServer.crt.pem -extfile sslGARGOYLE.cnf
+`openssl genrsa -out gargoyleServer.key.pem 2048`
 
-# Make client certs for db connections
-openssl genrsa -out gargoyleClientDb.key.pem 2048
+__create csr to be signed__
 
-# create client csr
-openssl req -extensions v3_req -sha256 -new -key gargoyleClientDb.key.pem -out gargoyleClientDb.csr -config sslGARGOYLE.cnf
+`openssl req -extensions v3_req -sha256 -new -key gargoyleServer.key.pem -out gargoyleServer.csr -config sslGARGOYLE.cnf`
 
-# Common Name (e.g. server FQDN or YOUR name) []:gargoyleClientDb  <--- cannot match CA certificate CommmonName
+*Common Name (e.g. server FQDN or YOUR name) []:gargoyleServer   <--- cannot match CA certificate CommonName*
 
-#sign client csr
-openssl x509 -req -extensions v3_req -days 1095 -sha256 -in gargoyleClientDb.csr -CA gargoyleRootCA.crt.pem -CAkey gargoyleRootCA.key.pem -CAcreateserial -out gargoyleClientDb.crt.pem -extfile sslGARGOYLE.cnf
+__Create SAN certs signed by custom CA__
 
-# check certs OK
-openssl verify -verbose -CAfile gargoyleRootCA.crt.pem gargoyleServer.crt.pem gargoyleClientDb.crt.pem
-# gargoyleServer.crt.pem: OK
-# gargoyleClientDb.crt.pem: OK
+`openssl x509 -req -extensions v3_req -days 3650 \`
+`-sha256 -in gargoyleServer.csr -CA gargoyleRootCA.crt.pem \`
+`-CAkey gargoyleRootCA.key.pem -CAcreateserial \`
+`-out gargoyleServer.crt.pem -extfile sslGARGOYLE.cnf`
 
-#Copy all the keys (except gargoyleRootCA.key.pem) to the containers
+__Make client certs for db connections__
 
-cp gargoyleRootCA.crt.pem ../api
-cp gargoyleServer.crt.pem ../api
-cp gargoyleServer.key.pem ../api
-cp gargoyleClientDb.crt.pem ../api
-cp gargoyleClientDb.key.pem ../api
+`openssl genrsa -out gargoyleClientDb.key.pem 2048`
 
-cp gargoyleRootCA.crt.pem ../db
-cp gargoyleServer.crt.pem ../db
-cp gargoyleServer.key.pem ../db
-cp gargoyleClientDb.crt.pem ../db
-cp gargoyleClientDb.key.pem ../db
+__create client csr__
 
-cp gargoyleRootCA.crt.pem ../elastic
-cp gargoyleServer.crt.pem ../elastic
-cp gargoyleServer.key.pem ../elastic
-cp gargoyleClientDb.crt.pem ../elastic
-cp gargoyleClientDb.key.pem ../elastic
+`openssl req -extensions v3_req -sha256 -new -key gargoyleClientDb.key.pem -out gargoyleClientDb.csr -config sslGARGOYLE.cnf`
 
-cp gargoyleRootCA.crt.pem ../kibana
-cp gargoyleServer.crt.pem ../kibana
-cp gargoyleServer.key.pem ../kibana
-cp gargoyleClientDb.crt.pem ../kibana
-cp gargoyleClientDb.key.pem ../kibana
+*Common Name (e.g. server FQDN or YOUR name) []:gargoyleClientDb  <--- cannot match CA certificate CommmonName*
 
-cp gargoyleRootCA.crt.pem ../engine
-cp gargoyleServer.crt.pem ../engine
-cp gargoyleServer.key.pem ../engine
-cp gargoyleClientDb.crt.pem ../engine
-cp gargoyleClientDb.key.pem ../engine
+__sign client csr__
 
-Update permissions for files in container
+`openssl x509 -req -extensions v3_req -days 1095 -sha256 \`
+`-in gargoyleClientDb.csr -CA gargoyleRootCA.crt.pem \`
+`-CAkey gargoyleRootCA.key.pem -CAcreateserial \`
+`-out gargoyleClientDb.crt.pem -extfile sslGARGOYLE.cnf`
 
-### Update paths for dev/prod environments
+__check certs OK__
 
-find ../gargoyle -type f -exec chmod 644 {} \;
-find ../gargoyle -type d -exec chmod 755 {} \;
-find ../gargoyle -type f -name "*.sh" -exec chmod 755 {} \;
-find ../gargoyle -type f -name "*.py" -exec chmod 755 {} \;
-chmod 755 ../gargoyle/engine/proxychains-ng/configure
+`openssl verify -verbose -CAfile gargoyleRootCA.crt.pem gargoyleServer.crt.pem gargoyleClientDb.crt.pem`
+
+*gargoyleServer.crt.pem: OK*
+
+*gargoyleClientDb.crt.pem: OK*
+
+`Copy all the keys (except gargoyleRootCA.key.pem) to the containers`
+
+`cp gargoyleRootCA.crt.pem ../api`
+
+`cp gargoyleServer.crt.pem ../api`
+
+`cp gargoyleServer.key.pem ../api`
+
+`cp gargoyleClientDb.crt.pem ../api`
+
+`cp gargoyleClientDb.key.pem ../api`
+
+`cp gargoyleRootCA.crt.pem ../db`
+
+`cp gargoyleServer.crt.pem ../db`
+
+`cp gargoyleServer.key.pem ../db`
+
+`cp gargoyleClientDb.crt.pem ../db`
+
+`cp gargoyleClientDb.key.pem ../db`
+
+`cp gargoyleRootCA.crt.pem ../elastic`
+
+`cp gargoyleServer.crt.pem ../elastic`
+
+`cp gargoyleServer.key.pem ../elastic`
+
+`cp gargoyleClientDb.crt.pem ../elastic`
+
+`cp gargoyleClientDb.key.pem ../elastic`
+
+`cp gargoyleRootCA.crt.pem ../kibana`
+
+`cp gargoyleServer.crt.pem ../kibana`
+
+`cp gargoyleServer.key.pem ../kibana`
+
+`cp gargoyleClientDb.crt.pem ../kibana`
+
+`cp gargoyleClientDb.key.pem ../kibana`
+
+`cp gargoyleRootCA.crt.pem ../engine`
+
+`cp gargoyleServer.crt.pem ../engine`
+
+`cp gargoyleServer.key.pem ../engine`
+
+`cp gargoyleClientDb.crt.pem ../engine`
+
+`cp gargoyleClientDb.key.pem ../engine`
+
+__Update permissions for files in container__
+
+*Update paths for dev/prod environments*
+
+`find ../gargoyle -type f -exec chmod 644 {} \;`
+
+`find ../gargoyle -type d -exec chmod 755 {} \;`
+
+`find ../gargoyle -type f -name "*.sh" -exec chmod 755 {} \;`
+
+`find ../gargoyle -type f -name "*.py" -exec chmod 755 {} \;`
+
+`chmod 755 ../gargoyle/engine/proxychains-ng/configure`
 
