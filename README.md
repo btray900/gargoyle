@@ -18,10 +18,9 @@ Default is a volume for elasticsearch and the engine /var/log
 
 __Make new password for the first run, or if the elastic vlume gets deleted.__
 
-
 `docker exec -i g-elastic /bin/bash -c '/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto' | grep PASSWORD > .gargoyle.creds`
 
-*There will be not visible output, hit 'y' then 'enter' after a few seconds to continue password creation. Then run 'make_rc'*
+*There won't be visible output, hit 'y' then 'enter' after a few seconds to continue password creation. Then run 'make_rc'*
 
 `python3 make_rc.py`
 
@@ -31,19 +30,26 @@ __Make new password for the first run, or if the elastic vlume gets deleted.__
 
 ## Update sysctl or Elasticsearch may have issues
 
-Check and set on docker host first to 262144 or higher
+__Check and set on docker host settings__
 
 `sysctl vm.max_map_count`
 
 `sudo sysctl -w vm.max_map_count=262144`
 
+`sudo echo "fs.file-max = 65535" >> /etc/sysctl.conf`
+
 `sudo echo "vm.max_map_count=262144" >> /etc/sysctl.conf`
 
 `sudo ulimit -n 65536`
 
+*Add to /etc/security/limits.conf*
+
+`* soft nofile 65535`
+
+`* hard nofile 65535`
+
 
 ## Make your own certs if desired
-
 
 ### Update the sslGARGOYLE.cnf IP and/or names if needed
 
