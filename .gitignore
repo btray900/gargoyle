@@ -3,3 +3,6 @@ id_rsa
 *.pyc
 .project
 .pydevproject
+env.svt
+*.pem
+*.pfx

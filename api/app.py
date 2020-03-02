@@ -9,10 +9,12 @@ import sys
 
 app = Flask(__name__)
 
-dbHost = 'g-db'
+
+database = os.environ['DB_DATABASE']
+
+dbHost = os.environ['DB_HOST']
 uid = os.environ['DB_USER']
 pw = os.environ['DB_PW']
-database = 'osg'
 
 dbInfo = {
     'checks': {
@@ -97,13 +99,14 @@ def createRow(dbtable):
         countSql = countSql.strip(' AND ')
 
         if request.method == 'POST':
+
             db = pymysql.connect(dbHost,
                                  uid,
                                  pw,
                                  database,
-                                 ssl={'key': '/app/gargoyleClientDb.key.pem',
-                                      'cert': '/app/gargoyleClientDb.crt.pem',
-                                       'ca': '/app/gargoyleRootCA.crt.pem'})
+                                 ssl={'key': CLIENTKEY_FILE,
+                                      'cert': CLIENTCRT_FILE,
+                                      'ca': CACRT_FILE})
 
             # replace python/requests/json unescaping of required sql escapes
             if dbtable == 'checks':
@@ -183,13 +186,14 @@ def doOneRowById(dbtable, id):
                 escapedSql = sql
 
             try:
+
                 db = pymysql.connect(dbHost,
                                      uid,
                                      pw,
                                      database,
-                                     ssl={'key': '/app/gargoyleClientDb.key.pem',
-                                          'cert': '/app/gargoyleClientDb.crt.pem',
-                                          'ca': '/app/gargoyleRootCA.crt.pem'})
+                                     ssl={'key': CLIENTKEY_FILE,
+                                          'cert': CLIENTCRT_FILE,
+                                          'ca': CACRT_FILE})
 
                 cursor = db.cursor()
                 cursor.execute(escapedSql)
@@ -215,13 +219,14 @@ def doOneRowById(dbtable, id):
     elif request.method == 'GET':    # READ BY ID
         try:
             try:
+
                 db = pymysql.connect(dbHost,
                                      uid,
                                      pw,
                                      database,
-                                     ssl={'key': '/app/gargoyleClientDb.key.pem',
-                                          'cert': '/app/gargoyleClientDb.crt.pem',
-                                          'ca': '/app/gargoyleRootCA.crt.pem'})
+                                     ssl={'key': CLIENTKEY_FILE,
+                                          'cert': CLIENTCRT_FILE,
+                                          'ca': CACRT_FILE})
 
                 cursor = db.cursor(pymysql.cursors.DictCursor)
                 cursor.execute('SELECT * FROM %s WHERE id = %s' % (table, id))
@@ -252,9 +257,9 @@ def doOneRowById(dbtable, id):
                                      uid,
                                      pw,
                                      database,
-                                     ssl={'key': '/app/gargoyleClientDb.key.pem',
-                                          'cert': '/app/gargoyleClientDb.crt.pem',
-                                          'ca': '/app/gargoyleRootCA.crt.pem'})
+                                     ssl={'key': CLIENTKEY_FILE,
+                                          'cert': CLIENTCRT_FILE,
+                                          'ca': CACRT_FILE})
 
                 cursor = db.cursor()
                 cursor.execute('DELETE FROM %s WHERE id = %s' % (table, id))
@@ -292,9 +297,9 @@ def getAllRows(dbtable):
                                  uid,
                                  pw,
                                  database,
-                                 ssl={'key': '/app/gargoyleClientDb.key.pem',
-                                      'cert': '/app/gargoyleClientDb.crt.pem',
-                                      'ca': '/app/gargoyleRootCA.crt.pem'})
+                                 ssl={'key': CLIENTKEY_FILE,
+                                      'cert': CLIENTCRT_FILE,
+                                      'ca': CACRT_FILE})
 
             cursor = db.cursor(pymysql.cursors.DictCursor)
             cursor.execute("SELECT * FROM %s ORDER BY id ASC" % (table))
@@ -304,6 +309,45 @@ def getAllRows(dbtable):
         except pymysql.Error as e:
             print(e, flush=True)
             message = {'status': 'ERROR', 'payload': 'Run: docker logs cloudcom-api'}
+
+        resp = jsonify(message)
+        resp.headers['Content-Security-Policy'] = "default-src 'self';"
+        resp.headers['X-XSS-Protection'] = "1; mode=block"
+        resp.headers['Strict-Transport-Security'] = "max-age=3156000; includeSubDomains"
+        resp.headers['X-Frame-Options'] = "SAMEORIGIN"
+        resp.headers['X-Content-Type'] = "nosniff"
+        resp.headers['Server'] = "unknown"
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        print(e, flush=True)
+    finally:
+        cursor.close()
+        db.close()
+
+
+# read all checks by component - called by commonhandlers
+@app.route('/v2/<string:tblField>/<string:tblValue>', methods=['GET'])
+@basic_auth.required
+def getCloudChecksByComponent(tblField, tblValue):
+    try:
+        try:
+            db = pymysql.connect(dbHost,
+                                 uid,
+                                 pw,
+                                 database,
+                                 ssl={'key': CLIENTKEY_FILE,
+                                      'cert': CLIENTCRT_FILE,
+                                      'ca': CACRT_FILE})
+
+            cursor = db.cursor(pymysql.cursors.DictCursor)
+            cursor.execute("SELECT * FROM securityChecks WHERE %s = '%s' AND enabled = 1" % (tblField, tblValue))
+            rows = cursor.fetchall()
+            count = len(rows)
+            message = {'status': 'OK', 'payload': rows, 'count': count}
+        except pymysql.Error as e:
+            print(e, flush=True)
+            message = {'status': 'ERROR', 'payload': 'Run: docker logs svt-db'}
 
         resp = jsonify(message)
         resp.headers['Content-Security-Policy'] = "default-src 'self';"
@@ -363,6 +407,18 @@ def not_good(error=None):
 
 
 if __name__ == '__main__':
+
+    CACRT_FILE = os.environ['CACRT_FILE']
+
+    SERVERCRT_FILE = os.environ['SERVERCRT_FILE']
+    SERVERKEY_FILE = os.environ['SERVERKEY_FILE']
+
+    CLIENTCRT_FILE = os.environ['CLIENTCRT_FILE']
+    CLIENTKEY_FILE = os.environ['CLIENTKEY_FILE']
+
+    API_BACKPORT = os.environ['API_BACKPORT']
+
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain('gargoyleServer.crt.pem', 'gargoyleServer.key.pem')
-    app.run(host='0.0.0.0', port='5000', ssl_context=(context))
+    context.load_cert_chain(SERVERCRT_FILE, SERVERKEY_FILE)
+
+    app.run(host='0.0.0.0', port=API_BACKPORT, ssl_context=(context))

@@ -1,0 +1,48 @@
+---
+
+  env_file: env.gargoyle
+  gargoyle_ip: 127.0.0.1
+  g_network: "172.23.14.0/28"
+
+  cacrt_file: gRootCA_v2.crt.pem
+  serverkey_file: gServer_v2.key.pem
+  servercrt_file: gServer_v2.crt.pem
+  clientkey_file: gClientDb_v2.key.pem
+  clientcrt_file: gClientDb_v2.crt.pem
+
+  elastic_backport: 9200
+  elastic_frontport: 59200
+  elastic_host: g-elastic
+  elastic_ip: 172.23.14.2
+  elastic_proto: https
+  elastic_user: elastic
+
+  kibana_backport: 5601
+  kibana_frontport: 55601
+  kibana_host: g-kibana
+  kibana_ip: 172.23.14.3
+  kibana_proto: https
+  kibana_user: kibana
+
+  db_backport: 3306
+  db_database: osg_db
+  db_host: g-db
+  db_ip: 172.23.14.4
+  db_root_user: root
+  db_user: osg_user
+
+  api_backport: 5000
+  api_frontport: 55000
+  api_host: g-api
+  api_ip: 172.23.14.5
+  api_proto: https
+  api_user: gargoyleapi
+
+  apache_backport: 443
+  apache_frontport: 55443
+  apache_host: g-apache
+  apache_ip: 172.23.14.6
+  apache_user: apacheuser
+
+  engine_host: g-engine
+  engine_ip: 172.23.14.7

@@ -61,6 +61,7 @@ def variableWorker(gargoyleFunctions,
                    queue, 
                    component, 
                    checkID, 
+                   rowId, 
                    checkTask, 
                    command, 
                    regex, 
@@ -101,6 +102,7 @@ def variableWorker(gargoyleFunctions,
                                    isSudoWhitelistCmd, 
                                    component, 
                                    checkID, 
+                                   rowId, 
                                    checkTask, 
                                    command, 
                                    regex, 
@@ -118,6 +120,7 @@ def setLogOutput(host,
                  level, 
                  component, 
                  checkID, 
+                 rowId, 
                  checkTask, 
                  cmd, 
                  resource = '', 
@@ -168,13 +171,14 @@ def setLogOutput(host,
         output = base64.b64encode(bytes(output, 'utf-8'))
 
     # JSON log format
-    logOutput = '{"gargoyleLogType":"%s","gargoyleTimestamp":"%s","gargoyleSeverity":"%s","gargoyleHostname":"%s","gargoyleComponent":"%s","gargoyleCheckID":"%s","gargoyleTask":"%s","gargoyleCommand":"%s","gargoyleResource":"%s","gargoyleExpected":"%s","gargoyleCheckValue":"%s","gargoyleValueLogic":"%s","gargoyleActual":"%s","gargoyleOutput":"%s","gargoyleResult":"%s"}' % (
+    logOutput = '{"gargoyleLogType":"%s","gargoyleTimestamp":"%s","gargoyleSeverity":"%s","gargoyleHostname":"%s","gargoyleComponent":"%s","gargoyleCheckID":"%s","gargoyleRowId": "%s", "gargoyleTask":"%s","gargoyleCommand":"%s","gargoyleResource":"%s","gargoyleExpected":"%s","gargoyleCheckValue":"%s","gargoyleValueLogic":"%s","gargoyleActual":"%s","gargoyleOutput":"%s","gargoyleResult":"%s"}' % (
         'osgLogger',
         timeStamp,
         level,
         host,
         component,
         checkID,
+        rowId,
         checkTask,
         cmd,
         resource,
@@ -192,6 +196,7 @@ def injectionTest(commonHandler,
                   isSudoWhitelistCmd, 
                   component, 
                   checkID, 
+                  rowId,
                   checkTask, 
                   command, 
                   regex, 
@@ -232,6 +237,7 @@ def checkSubstrConfigParameter(commonHandler,
                                isSudoWhitelistCmd, 
                                component, 
                                checkID, 
+                               rowId,
                                checkTask, 
                                command, 
                                regex, 
@@ -345,6 +351,7 @@ def checkSubstrConfigParameter(commonHandler,
                                  level, 
                                  component, 
                                  checkID, 
+                                 rowId,
                                  checkTask, 
                                  fullCmd, 
                                  resource, 
@@ -362,6 +369,7 @@ def checkUnsetParameter(commonHandler,
                         isSudoWhitelistCmd, 
                         component, 
                         checkID, 
+                        rowId,
                         checkTask, 
                         command, 
                         regex, 
@@ -467,6 +475,7 @@ def checkUnsetParameter(commonHandler,
                                  level, 
                                  component, 
                                  checkID, 
+                                 rowId,
                                  checkTask, 
                                  fullCmd, 
                                  resource, 
@@ -484,6 +493,7 @@ def checkValueConfigParameter(commonHandler,
                               isSudoWhitelistCmd, 
                               component, 
                               checkID, 
+                              rowId,
                               checkTask, 
                               command, 
                               regex, 
@@ -582,6 +592,7 @@ def checkValueConfigParameter(commonHandler,
                                  level, 
                                  component, 
                                  checkID, 
+                                 rowId,
                                  checkTask, 
                                  fullCmd, 
                                  resource, 
@@ -599,6 +610,7 @@ def checkFileSystemSecurity(commonHandler,
                             isSudoWhitelistCmd, 
                             component, 
                             checkID, 
+                            rowId,
                             checkTask, 
                             command, 
                             regex, 
@@ -682,6 +694,7 @@ def checkFileSystemSecurity(commonHandler,
                                      level, 
                                      component, 
                                      checkID, 
+                                     rowId,
                                      checkTask, 
                                      fullCmd, 
                                      resource, 
@@ -699,6 +712,7 @@ def failIfAllListInLine(commonHandler,
                         isSudoWhitelistCmd, 
                         component, 
                         checkID, 
+                        rowId,
                         checkTask, 
                         command, 
                         regex, 
@@ -767,6 +781,7 @@ def failIfAllListInLine(commonHandler,
                              level, 
                              component, 
                              checkID, 
+                             rowId,
                              checkTask, 
                              fullCmd, 
                              resource, 
@@ -784,6 +799,7 @@ def passIfAllListInLine(commonHandler,
                         isSudoWhitelistCmd, 
                         component, 
                         checkID, 
+                        rowId,
                         checkTask, 
                         command, 
                         regex, 
@@ -852,6 +868,7 @@ def passIfAllListInLine(commonHandler,
                              level, 
                              component, 
                              checkID, 
+                             rowId,
                              checkTask, 
                              fullCmd, 
                              resource, 
@@ -886,9 +903,27 @@ def main(gargoyleFunctions):
 
     # help
     parser = argparse.ArgumentParser(description='Run OSG checks against host list')
-    parser.add_argument('-c', '--component', nargs='?', required=False, const='identity', help='Test by component. Default: identity.',)
+
     parser.add_argument('-u', '--user_name', required=True, help='SSH Username',)
+
+    group = parser.add_mutually_exclusive_group()
+
+    group.add_argument('-c',
+                        metavar='component',
+                        nargs='?',
+                        required=False,
+                        const='identity',
+                        help='''Test by component. Default: identity''',)
+
+    group.add_argument('-r', '--row',
+                        nargs='?',
+                        const='183',
+                        required=False,
+                        help='DB row ID for single command, Default: 183',)
+
+
     parser.add_argument('-n', '--node_list', required=True, help='Path to node list',)
+
     args = parser.parse_args()
 
     hostFile = ''
@@ -900,10 +935,15 @@ def main(gargoyleFunctions):
     else:
         username = args.user_name
 
-    if args.component is not None:
-        singleComponent = args.component
+    if args.c is not None:
+        chkComponent = args.c
     else:
-        singleComponent = False
+        chkComponent = False
+
+    if args.row is not None:
+        chkRowId = args.row
+    else:
+        chkRowId = False
 
     if args.node_list is not None:
         hostFile = args.node_list
@@ -940,17 +980,20 @@ def main(gargoyleFunctions):
     queue = manager.Queue()
     watcher = pool.apply_async(listener, args=(commonHandler, queue,))
 
-
     # Set all hostname checks in securityChecks
     for host in hosts:
+
         host = host.strip()
 
         # Set hostname for check selection
         securityChecks[host] = []
 
         # Fill up host dictionary with checks
-        if singleTest:
-            securityChecks[host].append(checkHandler.getChecks(singleTest))
+
+        if chkComponent:
+            securityChecks[host].append(list(commonHandler.getChecks('component', chkComponent)))
+        elif chkRowId:
+            securityChecks[host].append(list(commonHandler.getCheck(chkRowId)))
         else:
             securityChecks[host].append(checkHandler.getChecks('identity'))
             securityChecks[host].append(checkHandler.getChecks('dashboard'))
@@ -962,12 +1005,14 @@ def main(gargoyleFunctions):
 
     # Loop through accumulated checks for injection
     for host, checkList in securityChecks.items():
+
         host = host.strip()
 
         for checkJsonRow in checkList:
 
             for row in checkJsonRow:
 
+                rowId = row['id']
                 component = row['component']
                 checkID = row['checkID']
                 checkTask = row['checkTask']
@@ -988,7 +1033,13 @@ def main(gargoyleFunctions):
                     if isAllowed:
                         isSudoWhitelistCmd = commonHandler.isSudoWhitelist(command)
 
-                        securityWorker = pool.apply_async(variableWorker, args=(gargoyleFunctions, isSudoWhitelistCmd, commonHandler, queue, component, checkID, checkTask, command, regex, resource, expected, checkValue, valueLogic, host, fkFunction))
+                        securityWorker = pool.apply_async(variableWorker, args=(
+                                                                                gargoyleFunctions,
+                                                                                isSudoWhitelistCmd,
+                                                                                commonHandler, queue, component, 
+                                                                                checkID, rowId, checkTask, command, regex, 
+                                                                                resource, expected, checkValue, 
+                                                                                valueLogic, host, fkFunction))
                         securityWorkers.append(securityWorker)
 
                     else:

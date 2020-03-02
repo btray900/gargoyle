@@ -1,10 +1,19 @@
 FROM docker.elastic.co/kibana/kibana:6.8.6
 
-COPY ./kibana.yml /usr/share/kibana/config/kibana.yml
+ARG cacrt
+ARG servercrt
+ARG serverkey
+ARG clientcrt
+ARG clientkey
 
-COPY ./gargoyleRootCA.crt.pem /usr/share/kibana/config/
-COPY ./gargoyleServer.crt.pem /usr/share/kibana/config/
-COPY ./gargoyleServer.key.pem /usr/share/kibana/config/
+COPY $cacrt /etc/ssl/certs/
+COPY $cacrt /usr/share/kibana/config/
+COPY $servercrt /usr/share/kibana/config/
+COPY $serverkey /usr/share/kibana/config/
+COPY $clientcrt /usr/share/kibana/config/
+COPY $clientkey /usr/share/kibana/config/
+
+COPY ./kibana.yml /usr/share/kibana/config/kibana.yml
 
 EXPOSE 5601
 

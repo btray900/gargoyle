@@ -7,12 +7,18 @@ import subprocess
 import shlex
 import requests
 import sys
+import os
 
 class CommonHandler:
 
     def __init__(self, username):
 
         self.username = username
+
+        self.apiUser = os.environ['API_USER']
+        self.apiPassword = os.environ['API_PW']
+        self.apiHost = os.environ['API_HOST']
+        self.apiBackport = os.environ['API_BACKPORT']
 
         self.gargoyleLogPath = '/var/log/gargoyle'
 
@@ -47,11 +53,36 @@ class CommonHandler:
 
         return
 
-    def getChecks(self, component):
-        response = requests.get('http://api:5000/api/v1/checks/%s' % (component))
+
+    def getChecks(self, tblField, tblValue):
+        response = requests.get(f'https://{self.apiHost}:{self.apiBackport}/v2/{tblField}/{tblValue}',
+                                auth=(self.apiUser, self.apiPassword),
+                                verify='/etc/ssl/certs')
         data = response.json()
         checks = data['payload']
         return checks
+
+
+    def getCheck(self, rowId):
+        response = requests.get(f'https://{self.apiHost}:{self.apiBackport}/v2/checks/{rowId}',
+                                auth=(self.apiUser, self.apiPassword),
+                                verify='/etc/ssl/certs')
+
+        data = response.json()
+        payload = []
+        payload.append(data['payload'])
+        data['payload'] = payload
+        checks = data['payload']
+        return checks
+
+
+    def getPatterns(self):
+        response = requests.get(f'https://{self.apiHost}:{self.apiBackport}/v2/patterns', auth=(self.apiUser,self.apiPassword), verify='/etc/ssl/certs')
+        data = response.json()
+        patterns = data['payload']
+        return patterns
+
+
 
     def getHostname(self, host):
         '''
@@ -176,7 +207,7 @@ class CommonHandler:
         s.load_system_host_keys()
 
         try:
-#            print(sshCommand)
+            print(sshCommand)
             s.connect(host, username=self.username, timeout=5)
             (stdin, stdout, stderr) = s.exec_command(sshCommand) # nosec
             lines = stdout.readlines()

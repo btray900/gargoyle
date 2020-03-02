@@ -3,6 +3,12 @@
 
 FROM python:3.7
 
+ARG cacrt
+ARG servercrt
+ARG serverkey
+ARG clientcrt
+ARG clientkey
+
 RUN apt-get update && apt-get -y install \
 	openjdk-11-jdk \
         build-essential \
@@ -22,13 +28,13 @@ RUN mkdir -p /root/.ssh
 
 RUN mkdir -p /usr/local/share/ca-certificates/gargoyle
 
-COPY ./gargoyleRootCA.crt.pem /usr/local/share/ca-certificates/gargoyle/gargoyleRootCA.crt
+COPY $cacrt /usr/local/share/ca-certificates/gargoyle/gRootCA_v2.crt
 
-COPY ./gargoyleRootCA.crt.pem /etc/logstash/
-COPY ./gargoyleServer.crt.pem /etc/logstash/
-COPY ./gargoyleServer.key.pem /etc/logstash/
-COPY ./gargoyleClientDb.crt.pem /etc/logstash/
-COPY ./gargoyleClientDb.key.pem /etc/logstash/
+COPY $cacrt /etc/logstash/
+COPY $servercrt /etc/logstash/
+COPY $serverkey /etc/logstash/
+COPY $clientcrt /etc/logstash/
+COPY $clientkey /etc/logstash/
 
 COPY ./id_rsa /root/.ssh
 COPY ./config /root/.ssh

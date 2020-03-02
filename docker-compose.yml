@@ -3,10 +3,19 @@ version: '3'
 services:
 
   elastic:
-    build: ./elastic
-    container_name: g-elastic
-    hostname: g-elastic
-    image: g-elastic
+    build:
+      context: ./elastic
+      args:
+        - cacrt=${CACRT_FILE}
+        - servercrt=${SERVERCRT_FILE}
+        - serverkey=${SERVERKEY_FILE}
+        - clientcrt=${CLIENTCRT_FILE}
+        - clientkey=${CLIENTKEY_FILE} 
+    container_name: ${ELASTIC_HOST}
+    hostname: ${ELASTIC_HOST}
+    image: ${ELASTIC_HOST}
+    env_file:
+      - ${ENV_FILE}
     environment:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m -Des.http.cname_in_publish_address=true"
@@ -19,123 +28,182 @@ services:
         hard: 65536
     networks:
       gargoyle:
-        ipv4_address: 172.23.0.5
+        ipv4_address: ${ELASTIC_IP}
     ports:
-      - "59200:9200"
+      - "${ELASTIC_FRONTPORT}:${ELASTIC_BACKPORT}"
     extra_hosts:
-      - "g-db:172.23.0.2"
-      - "g-engine:172.23.0.4"
-      - "g-api:172.23.0.3"
-      - "g-kibana:172.23.0.6"
+      - "${ELASTIC_HOST}:${ELASTIC_IP}"
+      - "${KIBANA_HOST}:${KIBANA_IP}"
+      - "${DB_HOST}:${DB_IP}"
+      - "${API_HOST}:${API_IP}"
+      - "${APACHE_HOST}:${APACHE_IP}"
+      - "${ENGINE_HOST}:${ENGINE_IP}"
     volumes:
-      - g-elastic_vol:/opt/es-data
-    restart: always
+      - g-elastic_v2:/opt/es_data
+    restart: "no"
+
+
+  kibana:
+    build:
+      context: ./kibana
+      args:
+        - cacrt=${CACRT_FILE}
+        - servercrt=${SERVERCRT_FILE}
+        - serverkey=${SERVERKEY_FILE}
+        - clientcrt=${CLIENTCRT_FILE}
+        - clientkey=${CLIENTKEY_FILE} 
+    container_name: ${KIBANA_HOST}
+    hostname: ${KIBANA_HOST}
+    image: ${KIBANA_HOST}
+    env_file:
+      - ${ENV_FILE}
+    networks:
+      gargoyle:
+        ipv4_address: ${KIBANA_IP}
+    ports:
+      - "${KIBANA_FRONTPORT}:${KIBANA_BACKPORT}"
+    extra_hosts:
+      - "${ELASTIC_HOST}:${ELASTIC_IP}"
+      - "${KIBANA_HOST}:${KIBANA_IP}"
+      - "${DB_HOST}:${DB_IP}"
+      - "${API_HOST}:${API_IP}"
+      - "${APACHE_HOST}:${APACHE_IP}"
+      - "${ENGINE_HOST}:${ENGINE_IP}"
+    restart: "no"
 
 
   db:
     build: 
       context: ./db
       args:
+        - dbuser=${DB_USER}
         - dbpass=${DB_PW}
-    container_name: g-db
-    image: g-db
-    hostname: g-db
+        - dbdatabase=${DB_DATABASE}
+        - cacrt=${CACRT_FILE}
+        - servercrt=${SERVERCRT_FILE}
+        - serverkey=${SERVERKEY_FILE}
+        - clientcrt=${CLIENTCRT_FILE}
+        - clientkey=${CLIENTKEY_FILE}
+    container_name: ${DB_HOST}
+    image: ${DB_HOST}
+    hostname: ${DB_HOST}
+    env_file:
+      - ${ENV_FILE}
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PW}
-      - DB_USER=${DB_USER}
-      - DB_PW=${DB_PW}
     networks:
       gargoyle:
-        ipv4_address: 172.23.0.2
+        ipv4_address: ${DB_IP}
     extra_hosts:
-      - "g-api:172.23.0.3"
-      - "g-engine:172.23.0.4"
-      - "g-elastic:172.23.0.5"
-      - "g-kibana:172.23.0.6"
-    restart: always
+      - "${ELASTIC_HOST}:${ELASTIC_IP}"
+      - "${KIBANA_HOST}:${KIBANA_IP}"
+      - "${DB_HOST}:${DB_IP}"
+      - "${API_HOST}:${API_IP}"
+      - "${APACHE_HOST}:${APACHE_IP}"
+      - "${ENGINE_HOST}:${ENGINE_IP}"
+    restart: "no"
 
 
   api:
-    build: ./api
-    container_name: g-api
-    hostname: g-api
-    image: g-api
-    environment:
-      - DB_USER=${DB_USER}
-      - DB_PW=${DB_PW}
-      - API_USER=${API_USER}
-      - API_PW=${API_PW}
+    build:
+      context: ./api
+      args:
+        - cacrt=${CACRT_FILE}
+        - servercrt=${SERVERCRT_FILE}
+        - serverkey=${SERVERKEY_FILE}
+        - clientcrt=${CLIENTCRT_FILE}
+        - clientkey=${CLIENTKEY_FILE}
+    container_name: ${API_HOST}
+    hostname: ${API_HOST}
+    image: ${API_HOST}
+    env_file:
+      - ${ENV_FILE}
     networks:
       gargoyle:
-        ipv4_address: 172.23.0.3
+        ipv4_address: ${API_IP}
     ports:
-      - "55000:5000"
+      - "${API_FRONTPORT}:${API_BACKPORT}"
     extra_hosts:
-      - "g-db:172.23.0.2"
-      - "g-engine:172.23.0.4"
-      - "g-elastic:172.23.0.5"
-      - "g-kibana:172.23.0.6"
-    restart: always
+      - "${ELASTIC_HOST}:${ELASTIC_IP}"
+      - "${KIBANA_HOST}:${KIBANA_IP}"
+      - "${DB_HOST}:${DB_IP}"
+      - "${API_HOST}:${API_IP}"
+      - "${APACHE_HOST}:${APACHE_IP}"
+      - "${ENGINE_HOST}:${ENGINE_IP}"
+    restart: "no"
 
 
-  kibana:
-    build: ./kibana
-    container_name: g-kibana
-    hostname: g-kibana
-    image: g-kibana
-    environment:
-      - ELASTIC_USER=${ELASTIC_USER}
-      - ELASTIC_PW=${ELASTIC_PW}
+  apache:
+    build: 
+      context: ./apache
+      args:
+        - frontuser=${APACHE_USER}
+        - frontpw=${APACHE_PW}
+        - cacrt=${CACRT_FILE}
+        - servercrt=${SERVERCRT_FILE}
+        - serverkey=${SERVERKEY_FILE}
+        - clientcrt=${CLIENTCRT_FILE}
+        - clientkey=${CLIENTKEY_FILE}
+    container_name: ${APACHE_HOST}
+    hostname: ${APACHE_HOST}
+    image: ${APACHE_HOST}
+    env_file:
+      - ${ENV_FILE}
     networks:
       gargoyle:
-        ipv4_address: 172.23.0.6
+        ipv4_address: ${APACHE_IP}
     ports:
-      - "55601:5601"
+      - "${APACHE_FRONTPORT}:${APACHE_BACKPORT}"
     extra_hosts:
-      - "g-db:172.23.0.2"
-      - "g-engine:172.23.0.4"
-      - "g-api:172.23.0.3"
-      - "g-elastic:172.23.0.5"
-    restart: always
+      - "${ELASTIC_HOST}:${ELASTIC_IP}"
+      - "${KIBANA_HOST}:${KIBANA_IP}"
+      - "${DB_HOST}:${DB_IP}"
+      - "${API_HOST}:${API_IP}"
+      - "${APACHE_HOST}:${APACHE_IP}"
+      - "${ENGINE_HOST}:${ENGINE_IP}"
+    restart: "no"
 
 
   engine:
-    build: ./engine
-    container_name: g-engine
-    hostname: g-engine
-    image: g-engine
-    environment:
-      - ELASTIC_USER=${ELASTIC_USER}
-      - ELASTIC_PW=${ELASTIC_PW}
-      - KIBANA_USER=${KIBANA_USER}
-      - KIBANA_PW=${KIBANA_PW}
-      - API_USER=${API_USER}
-      - API_PW=${API_PW}
-      - DB_USER=${DB_USER}
-      - DB_PW=${DB_PW}
-      - DB_ROOT_USER=${DB_ROOT_USER}
-      - DB_ROOT_PW=${DB_ROOT_PW}
+    build:
+      context: ./engine
+      args:
+        - cacrt=${CACRT_FILE}
+        - servercrt=${SERVERCRT_FILE}
+        - serverkey=${SERVERKEY_FILE}
+        - clientcrt=${CLIENTCRT_FILE}
+        - clientkey=${CLIENTKEY_FILE}
+    container_name: ${ENGINE_HOST}
+    hostname: ${ENGINE_HOST}
+    image: ${ENGINE_HOST}
+    env_file:
+      - ${ENV_FILE}
     networks:
       gargoyle:
-        ipv4_address: 172.23.0.4
+        ipv4_address: ${ENGINE_IP}
     extra_hosts:
-      - "g-db:172.23.0.2"
-      - "g-kibana:172.23.0.6"
-      - "g-api:172.23.0.3"
-      - "g-elastic:172.23.0.5"
+      - "${ELASTIC_HOST}:${ELASTIC_IP}"
+      - "${KIBANA_HOST}:${KIBANA_IP}"
+      - "${DB_HOST}:${DB_IP}"
+      - "${API_HOST}:${API_IP}"
+      - "${APACHE_HOST}:${APACHE_IP}"
+      - "${ENGINE_HOST}:${ENGINE_IP}"
     volumes:
-      - g-engine_vol:/var/log/gargoyle
-    restart: always
+      - g-engine_v2:/var/log/gargoyle
+    restart: "no"
 
 
 networks:
   gargoyle:
     ipam:
       config:
-        - subnet: 172.23.0.0/28
+        - subnet: ${G_NETWORK}
+
 
 volumes:
-  g-elastic_vol:
+
+  g-elastic_v2:
     external: true
-  g-engine_vol:
+
+  g-engine_v2:
     external: true

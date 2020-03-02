@@ -2,24 +2,25 @@ cluster.name: gargoyle-cluster
 
 node.name: g-elastic-node-1
 
+
 path.data: /opt/es_data
 path.logs: /var/log/elasticsearch
 
-network.host: g-elastic
-network.publish_host: g-elastic
+network.host: ${ELASTIC_HOST}
+network.publish_host: ${ELASTIC_HOST}
 
 discovery.zen.minimum_master_nodes: 1
-discovery.zen.ping.unicast.hosts: [ "g-elastic" ]
+discovery.zen.ping.unicast.hosts: [ "${ELASTIC_HOST}" ]
 
 node.master: true
-node.data: true 
+node.data: true
 node.ingest: true
 
 xpack.ssl.supported_protocols: TLSv1.2
 xpack.ssl.verification_mode: full
-xpack.ssl.key: /usr/share/elasticsearch/config/gargoyleServer.key.pem
-xpack.ssl.certificate: /usr/share/elasticsearch/config/gargoyleServer.crt.pem
-xpack.ssl.certificate_authorities: ["/usr/share/elasticsearch/config/gargoyleRootCA.crt.pem"]
+xpack.ssl.key: /usr/share/elasticsearch/config/${SERVERKEY_FILE}
+xpack.ssl.certificate: /usr/share/elasticsearch/config/${SERVERCRT_FILE}
+xpack.ssl.certificate_authorities: ["/usr/share/elasticsearch/config/${CACRT_FILE}"]
 
 xpack.security.enabled: true
 xpack.security.transport.ssl.enabled: true
@@ -30,3 +31,4 @@ xpack.security.audit.outputs: [ logfile ]
 xpack.monitoring.enabled: true
 xpack.monitoring.collection.enabled: true
 xpack.monitoring.elasticsearch.collection.enabled: true
+

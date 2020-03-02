@@ -1,4 +1,5 @@
-server.port: 5601
+
+server.port: ${KIBANA_BACKPORT}
 server.host: "0.0.0.0"
 server.maxPayloadBytes: 1048576
 
@@ -6,7 +7,7 @@ kibana.index: ".kibana"
 kibana.defaultAppId: "dashboards"
 
 xpack.security.enabled: true
-xpack.security.encryptionKey: "ABC1DEF2GHI4JK5LM3NOPQRST6UVWXYY"
+xpack.security.encryptionKey: "ABC1DEF2GHI4JK5LM3NOPQRST6UVWXYZ"
 xpack.security.sessionTimeout: 1800000
 
 xpack.monitoring.enabled: true
@@ -14,17 +15,17 @@ xpack.monitoring.elasticsearch.username: "${ELASTIC_USER}"
 xpack.monitoring.elasticsearch.password: "${ELASTIC_PW}"
 xpack.monitoring.kibana.collection.enabled: true
 
-elasticsearch.hosts: ["https://g-elastic:9200"]
+elasticsearch.hosts: ["${ELASTIC_PROTO}://${ELASTIC_HOST}:${ELASTIC_BACKPORT}"]
 elasticsearch.username: "${ELASTIC_USER}"
 elasticsearch.password: "${ELASTIC_PW}"
 
-elasticsearch.ssl.certificateAuthorities: /usr/share/kibana/config/gargoyleRootCA.crt.pem
+elasticsearch.ssl.certificateAuthorities: /usr/share/kibana/config/${CACRT_FILE}
 elasticsearch.ssl.verificationMode: full
 
 server.ssl.enabled: true
 server.ssl.supportedProtocols: ["TLSv1.2"]
-server.ssl.certificate: /usr/share/kibana/config/gargoyleServer.crt.pem
-server.ssl.key: /usr/share/kibana/config/gargoyleServer.key.pem
+server.ssl.certificate: /usr/share/kibana/config/${SERVERCRT_FILE}
+server.ssl.key: /usr/share/kibana/config/${SERVERKEY_FILE}
 
 # content-security-policy header
 csp.strict: true
@@ -35,3 +36,4 @@ server.customResponseHeaders:
   X-Frame-Options: "SAMEORIGIN"
   Strict-Transport-Security: "max-age=3156000; includeSubDomains"
   X-XSS-protection: "1; mode=block"
+

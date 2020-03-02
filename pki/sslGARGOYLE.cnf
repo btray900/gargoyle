@@ -222,18 +222,20 @@ keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = g-db
-DNS.2 = g-api
-DNS.3 = g-elastic
-DNS.4 = g-kibana
-DNS.5 = g-engine
-DNS.6 = localhost
-IP.1 = 172.23.0.2
-IP.2 = 172.23.0.3
-IP.3 = 172.23.0.4
-IP.4 = 172.23.0.5
-IP.5 = 172.23.0.6
-IP.6 = 127.0.0.1
+DNS.1 = g-elastic
+DNS.2 = g-kibana
+DNS.3 = g-db
+DNS.4 = g-api
+DNS.5 = g-apache
+DNS.6 = g-engine
+DNS.7 = localhost
+IP.1 = 172.23.14.2
+IP.2 = 172.23.14.3
+IP.3 = 172.23.14.4
+IP.4 = 172.23.14.5
+IP.5 = 172.23.14.6
+IP.6 = 172.23.14.7
+IP.7 = 127.0.0.1
 
 [v3_ca ]
 # Extensions for a typical CA
