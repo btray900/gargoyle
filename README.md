@@ -55,32 +55,19 @@ __Check and set on docker host settings__
 
 `openssl genrsa -out gRootCA_v2.key.pem 4096`
 
-`openssl req -new -x509 -extensions v3_ca -days 3650 \
--key gRootCA_v2.key.pem -sha256 \
--out gRootCA_v2.crt.pem -config sslGARGOYLE.cnf`
+`openssl req -new -x509 -extensions v3_ca -days 3650 -key gRootCA_v2.key.pem -sha256 -out gRootCA_v2.crt.pem -config sslGARGOYLE.cnf`
 
 `openssl genrsa -out gServer_v2.key.pem 4096`
 
-`openssl req -extensions v3_req -sha256 -new \
--key gServer_v2.key.pem \
--out gServer_v2.csr \
--config sslGARGOYLE.cnf`
+`openssl req -extensions v3_req -sha256 -new -key gServer_v2.key.pem -out gServer_v2.csr -config sslGARGOYLE.cnf`
 
-`openssl x509 -req -extensions v3_req -days 3650 \
--sha256 -in gServer_v2.csr -CA gRootCA_v2.crt.pem \
--CAkey gRootCA_v2.key.pem -CAcreateserial \
--out gServer_v2.crt.pem -extfile sslGARGOYLE.cnf`
+`openssl x509 -req -extensions v3_req -days 3650 -sha256 -in gServer_v2.csr -CA gRootCA_v2.crt.pem -CAkey gRootCA_v2.key.pem -CAcreateserial -out gServer_v2.crt.pem -extfile sslGARGOYLE.cnf`
 
 `openssl genrsa -out gClientDb_v2.key.pem 4096`
 
-`openssl req -extensions v3_req -sha256 -new \
--key gClientDb_v2.key.pem \
--out gClientDb_v2.csr -config sslGARGOYLE.cnf`
+`openssl req -extensions v3_req -sha256 -new -key gClientDb_v2.key.pem -out gClientDb_v2.csr -config sslGARGOYLE.cnf`
 
-`openssl x509 -req -extensions v3_req -days 3650 -sha256 \
--in gClientDb_v2.csr -CA gRootCA_v2.crt.pem \
--CAkey gRootCA_v2.key.pem -CAcreateserial \
--out gClientDb_v2.crt.pem -extfile sslGARGOYLE.cnf`
+`openssl x509 -req -extensions v3_req -days 3650 -sha256 -in gClientDb_v2.csr -CA gRootCA_v2.crt.pem -CAkey gRootCA_v2.key.pem -CAcreateserial -out gClientDb_v2.crt.pem -extfile sslGARGOYLE.cnf`
 
 `openssl verify -verbose -CAfile gRootCA_v2.crt.pem gServer_v2.crt.pem gClientDb_v2.crt.pem`
 
