@@ -9,17 +9,7 @@
 			$num_sort = 'id';
 			$other_sort = 'component';
 			$order = 'DESC';
-			$show = array('component','cloud','cloudVersion','releaseLabel','enabled','command','regex','resource','expected','foundationCheck','checkValue','valueLogic','fkFunction','checkTask','checkID','reportEnabled','reportLabel','info','reference','aspr');
-			$display = 'Word';
-		}
-
-		if($_GET['cat'] == 'cloudzones')
-		{
-			$classname = 'CloudZone';
-			$num_sort = 'id';
-			$other_sort = 'zone';
-			$order = 'ASC';
-			$show = array('cloud','zone','alias','architecture','zone_release','status','prod_date','cycle');
+			$show = array('component','enabled','command','regex','resource','expected','checkValue','valueLogic','fkFunction','checkTask','checkID','info');
 			$display = 'Word';
 		}
 
@@ -29,7 +19,7 @@
 			$num_sort = 'id';
 			$other_sort = 'components';
 			$order = 'DESC';
-			$show = array('cloud','pattern','components','type');
+			$show = array('pattern','components','type');
 			$display = 'Word';
 		}
 	}

@@ -16,17 +16,10 @@
 		frm_txt($classvar, 'resource/file', 'resource', '200');
 		frm_txt($classvar, 'expected setting', 'expected', '200');
 		frm_txt($classvar, 'Compare value', 'checkValue', '200');
+		frm_txt($classvar, 'Value Logic', 'valueLogic', '200');
 		frm_txt($classvar, 'Function FK', 'fkFunction', '200');
 		frm_txt($classvar, 'info', 'info', '200');
-		frm_txt($classvar, 'reference', 'reference', '200');
-		frm_txt($classvar, 'aspr', 'aspr', '200');
-		frm_txt($classvar, 'cloud', 'cloud', '200');
-		frm_txt($classvar, 'cloudVersion', 'cloudVersion', '200');
-		frm_txt($classvar, 'releaseLabel', 'releaseLabel', '200');
 		frm_txt($classvar, 'enabled', 'enabled', '200');
-		frm_txt($classvar, 'foundationCheck', 'foundationCheck', '200');
-		frm_txt($classvar, 'reportEnabled', 'reportEnabled', '200');
-		frm_txt($classvar, 'reportLabel', 'reportLabel', '200');
 
 		prn_frm_end();
 }?>

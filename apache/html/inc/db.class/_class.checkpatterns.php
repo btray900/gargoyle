@@ -12,7 +12,6 @@
                         $this->tbl_pfx          =       '';
                         $this->data_array       =       array();
                         $this->fieldlist        =       array(
-                                                              'cloud',
                                                               'components',
                                                               'pattern',
                                                               'type',

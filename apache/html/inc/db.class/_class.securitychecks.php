@@ -23,15 +23,7 @@
                                                                 'valueLogic',
 								'fkFunction',
                                                                 'info',
-								'reference',
-                                                                'aspr',
-                                                                'cloud',
-								'cloudVersion',
-                                                                'enabled',
-                                                                'foundationCheck',
-                                                                'reportEnabled',
-                                                                'reportLabel',
-								'releaseLabel'
+                                                                'enabled'
                                                                 );
 
                 } // end __construct
