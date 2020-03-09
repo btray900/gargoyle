@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # bt106c
 
 import re
@@ -155,8 +155,7 @@ def setLogOutput(host,
     timeStamp = datetime.datetime.utcnow().isoformat() + 'Z'
 
     # data is base64 encoded to prevent syntax issues with json lua encoder
-    if "'" in str(cmd) or '"' in str(cmd) or '\n' in str(cmd):
-        cmd = base64.b64encode(bytes(cmd, 'utf-8'))
+    cmd = base64.b64encode(cmd.encode('utf-8'))
 
     if "'" in str(expected) or '"' in str(expected) or '\n' in str(expected):
         expected = base64.b64encode(bytes(expected, 'utf-8'))
@@ -170,6 +169,9 @@ def setLogOutput(host,
     if "'" in str(output) or '"' in str(output) or '\n' in str(output):
         output = base64.b64encode(bytes(output, 'utf-8'))
 
+    cmdStr = str(cmd, 'utf-8')
+    b64Command = cmdStr.lstrip("b'").rstrip("'")
+
     # JSON log format
     logOutput = '{"gargoyleLogType":"%s","gargoyleTimestamp":"%s","gargoyleSeverity":"%s","gargoyleHostname":"%s","gargoyleComponent":"%s","gargoyleCheckID":"%s","gargoyleRowId": "%s", "gargoyleTask":"%s","gargoyleCommand":"%s","gargoyleResource":"%s","gargoyleExpected":"%s","gargoyleCheckValue":"%s","gargoyleValueLogic":"%s","gargoyleActual":"%s","gargoyleOutput":"%s","gargoyleResult":"%s"}' % (
         'osgLogger',
@@ -180,7 +182,7 @@ def setLogOutput(host,
         checkID,
         rowId,
         checkTask,
-        cmd,
+        b64Command,
         resource,
         expected,
         checkValue,

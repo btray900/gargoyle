@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 import re
 import argparse
 import time
@@ -173,7 +174,7 @@ def build_pdf(report_on, data, gte, lte, component):
            reportTitle = '%s %s' % (first[0], ' '.join(rest))
            report_subject = reportTitle
 
-        report_title = 'SVT %s Report' % (report_subject.title())
+        report_title = 'Gargoyle %s Report' % (report_subject.title())
 
 
     title = '%s_%s.pdf' % (report_title.replace(' ','-'), report_gen_day)
@@ -357,7 +358,7 @@ def main(reports):
     parser = argparse.ArgumentParser(description='Generate Security Verification Reports')
     parser.add_argument('-ip', '--elastic_ip', required=True,
                         help='Specify IP address of Elastic Search API endpoint (gargoyle-es-data) - e.g., 172.18.0.x ',)
-    parser.add_argument('-c', '--component', required=False, help='SVT component name', choices=components, )
+    parser.add_argument('-c', '--component', required=False, help='Gargoyle component name', choices=components, )
     parser.add_argument('-m', '--match', required=False, help='Report fails or all', nargs='?', choices=['All','Fail'],)
     parser.add_argument('-gte', '--gte', required=True, help='Specify report date range: Start date - e.g., NOTE: Takes datemath or date value'
                                                              'value. For more information: https://www.elastic.co/guide/en/e'
